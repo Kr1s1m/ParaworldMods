@@ -3,6 +3,6 @@ id BetaTest266
 requires MIRAGE
 type add-on
 info BetaTest266
-version 1.0
+version 1.1
 priority 15
 tryfilereplace */data/base/* data/base/ data/BetaTest266/
