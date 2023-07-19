@@ -266,10 +266,30 @@ class CStunningRoar inherit CActionTask
 	var real				m_fAnimLength;
 	var real				m_fRadius;
 	var string			m_sAnim;
+	
+	var array CFourCC		m_axAffectedTypes;
+	var array string 		m_asExceptionClasses;
+	
 
 	export constructor()
 		SetName("StunRoar");
 		m_fRadius = 10.0f;
+		
+		if(m_axAffectedTypes.NumEntries()==0)then
+			var CFourCC xANML = "ANML";
+			m_axAffectedTypes.AddEntry(xANML);
+			var CFourCC xCHTR = "CHTR";
+			m_axAffectedTypes.AddEntry(xCHTR);
+		endif;
+		
+		if(m_asExceptionClasses.NumEntries()==0)then
+			m_asExceptionClasses.AddEntry("aje_tyrannosaurus");
+			m_asExceptionClasses.AddEntry("aje_atroxosaurus");
+			m_asExceptionClasses.AddEntry("aje_catapult_rex");
+			m_asExceptionClasses.AddEntry("aje_catapult_rex_spear");
+			m_asExceptionClasses.AddEntry("seas_rex");
+		endif;
+		
 	endconstructor;
 	
 	export proc void Save(^CUOFWriterNode p_pxWriterNode)
@@ -331,6 +351,31 @@ class CStunningRoar inherit CActionTask
 	export proc bool OnActionEnd(bool p_bBroken)
 		return false;
 	endproc;
+	
+	proc bool canBeAffected(^CFightingObj p_pxFight)
+		var CFourCC xTypeConst = p_pxFight^.GetType();
+		var string sClassName = p_pxFight^.GetClassName();
+		var int i, iA = m_axAffectedTypes.NumEntries();
+		for(i=0)cond(i<iA)iter(i++)do
+			if(m_axAffectedTypes[i]==xTypeConst && !isException(sClassName))then
+				return true;
+			endif;
+		endfor;
+		return false;
+	endproc;
+	
+	proc bool isException(string p_sClassName)
+		var int i, iE = m_asExceptionClasses.NumEntries();
+		if(iE==0)then 
+			return false; 
+		endif;
+		for(i=0)cond(i<iE)iter(i++)do
+			if(m_asExceptionClasses[i]==p_sClassName)then
+				return true;
+			endif;
+		endfor;
+		return false;
+	endproc;
 
 	proc void USLOnTick(int p_iTime)
 		var ^CAnimal pxHandle = cast<CAnimal>(m_xHandle.GetObj());
@@ -355,18 +400,23 @@ class CStunningRoar inherit CActionTask
 				var ^CObjList pxEnemies=CSrvWrap.GetObjMgr()^.GetOwnerEnemyList(iOwner);
 				if(pxEnemies==null) then EndTask(); return; endif;
 				pxEnemies^.CopySorted(xList, pxHandle^.GetPos(), fRange);
-				var int i, iC = xList.NumEntries();
-				for(i=0)cond(i<iC)iter(i++)do
-					var ^CFightingObj pxFight = cast<CFightingObj>(xList[i].GetObj());
-					if(pxFight!=null && !pxFight^.GetTransportObj().IsValid())then
-						var bool bTrappedAlready=pxFight^.IsTrapped();
-						pxFight^.SetTrappedTime(m_fTime);
-						if(!bTrappedAlready)then
-							pxFight^.SetAnim("standanim",3);
-						endif;
-//						pxFight^.SetAnim("standanim",3);
-					endif;
-				endfor;
+				
+				if(m_axAffectedTypes.NumEntries() > 0)then
+					var int i, iC = xList.NumEntries();
+						for(i=0)cond(i<iC)iter(i++)do
+							var ^CFightingObj pxFight = cast<CFightingObj>(xList[i].GetObj());
+							if(pxFight!=null && !pxFight^.GetTransportObj().IsValid())then
+								var bool bTrappedAlready=pxFight^.IsTrapped();
+								if(canBeAffected(pxFight))then
+									pxFight^.SetTrappedTime(m_fTime);
+								endif;
+								if(!bTrappedAlready)then
+									pxFight^.SetAnim("standanim",3);
+								endif;
+//								pxFight^.SetAnim("standanim",3);
+							endif;
+						endfor;
+				endif;
 			endif;
 			if(m_fAnimLength>m_fTimeOffSet)then
 				pxHandle^.WaitAction(m_fAnimLength-m_fTimeOffSet);
