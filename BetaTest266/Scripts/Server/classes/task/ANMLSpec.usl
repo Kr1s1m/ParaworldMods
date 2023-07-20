@@ -259,14 +259,16 @@ endclass;
 
 class CStunningRoar inherit CActionTask
 
-	var CObjHndl		m_xHandle;
-	var string			m_sState;
+	var CObjHndl			m_xHandle;
+	var string				m_sState;
 	var real				m_fTime;
 	var real				m_fTimeOffSet;
 	var real				m_fAnimLength;
 	var real				m_fRadius;
-	var string			m_sAnim;
+	var string				m_sAnim;
 	
+	//Kr1s1m: We decided that T-Rex titan roar needs to be rebalanced, instead giving the titan penetration 
+	//Kr1s1m: So to give us control over the stun effect I added these two arrays as fields of the class
 	var array CFourCC		m_axAffectedTypes;
 	var array string 		m_asExceptionClasses;
 	
@@ -275,6 +277,8 @@ class CStunningRoar inherit CActionTask
 		SetName("StunRoar");
 		m_fRadius = 10.0f;
 		
+		//Kr1s1m: The affected by the stun classes are set here.
+		//Kr1s1m: You need to use the four letter CFourCC type codes and add them as entries.
 		if(m_axAffectedTypes.NumEntries()==0)then
 			var CFourCC xANML = "ANML";
 			m_axAffectedTypes.AddEntry(xANML);
@@ -282,6 +286,8 @@ class CStunningRoar inherit CActionTask
 			m_axAffectedTypes.AddEntry(xCHTR);
 		endif;
 		
+		//Kr1s1m: The exception units are set here.
+		//Kr1s1m: Add a class name of a unit as entry bellow to have that unit ignored.
 		if(m_asExceptionClasses.NumEntries()==0)then
 			m_asExceptionClasses.AddEntry("aje_tyrannosaurus");
 			m_asExceptionClasses.AddEntry("aje_atroxosaurus");
@@ -352,31 +358,6 @@ class CStunningRoar inherit CActionTask
 		return false;
 	endproc;
 	
-	proc bool canBeAffected(^CFightingObj p_pxFight)
-		var CFourCC xTypeConst = p_pxFight^.GetType();
-		var string sClassName = p_pxFight^.GetClassName();
-		var int i, iA = m_axAffectedTypes.NumEntries();
-		for(i=0)cond(i<iA)iter(i++)do
-			if(m_axAffectedTypes[i]==xTypeConst && !isException(sClassName))then
-				return true;
-			endif;
-		endfor;
-		return false;
-	endproc;
-	
-	proc bool isException(string p_sClassName)
-		var int i, iE = m_asExceptionClasses.NumEntries();
-		if(iE==0)then 
-			return false; 
-		endif;
-		for(i=0)cond(i<iE)iter(i++)do
-			if(m_asExceptionClasses[i]==p_sClassName)then
-				return true;
-			endif;
-		endfor;
-		return false;
-	endproc;
-
 	proc void USLOnTick(int p_iTime)
 		var ^CAnimal pxHandle = cast<CAnimal>(m_xHandle.GetObj());
 		if(pxHandle==null)then EndTask(); return; endif;
@@ -396,26 +377,64 @@ class CStunningRoar inherit CActionTask
 		elseif(m_sState == "do_stun")then
 			var int iOwner = pxHandle^.GetOwner();
 			if(iOwner>=0)then
-				var CObjList xList;
-				var ^CObjList pxEnemies=CSrvWrap.GetObjMgr()^.GetOwnerEnemyList(iOwner);
-				if(pxEnemies==null) then EndTask(); return; endif;
-				pxEnemies^.CopySorted(xList, pxHandle^.GetPos(), fRange);
 				
-				if(m_axAffectedTypes.NumEntries() > 0)then
+				var CObjQuery xQuery, xFriendlyQuery, xExceptionsQuery;
+				var CObjList xList, xFriendlyList, xExceptionsList;
+				
+				//Kr1s1m: This was the original logic that used to fill up the list of objects to be stunned.
+				//var ^CObjList pxEnemies=CSrvWrap.GetObjMgr()^.GetOwnerEnemyList(iOwner);
+				//if(pxEnemies==null) then EndTask(); return; endif;
+				//pxEnemies^.CopySorted(xList, pxHandle^.GetPos(), fRange);
+				
+				//Kr1s1m: First we prepare a query which will later help filter and exclude all friendly objects in a radius.
+				//Kr1s1m: For this purpose we will generate a list of only friendly objects using this very specific query.
+				xFriendlyQuery.RegionCircle(pxHandle^.GetPos(), fRange);
+				xFriendlyQuery.SetOwner(iOwner);
+				CSrvWrap.GetDiplomacyMgr().AddMyFriendsToSearch(iOwner, xFriendlyQuery);
+				
+				//Kr1s1m: Second, we prepare a query which will later help filter and exclude all exception classes in a radius.
+				//Kr1s1m: Thus, we set and append to the query each subsequent class from the exception array field.
+				xExceptionsQuery.RegionCircle(pxHandle^.GetPos(), fRange);
+				var int i, iE = m_asExceptionClasses.NumEntries();
+				if(iE==0) then EndTask(); return; endif;
+				xExceptionsQuery.SetClass(m_asExceptionClasses[0], false);
+				for(i=1)cond(i<iE)iter(i++)do
+					xExceptionsQuery.SetClass(m_asExceptionClasses[i], true);
+				endfor;
+				xExceptionsQuery.SetOwner(iOwner);
+				CSrvWrap.GetDiplomacyMgr().AddMyEnemiesToSearch(iOwner, xExceptionsQuery);
+				
+				
+				//Kr1s1m: Third, we preapare a query which will gather all objects of the desired affected types.
+				//Kr1s1m: This query will also exclude friendly diplomacy objects and exception units.
+				xQuery.RegionCircle(pxHandle^.GetPos(), fRange);
+				var int j, iA = m_axAffectedTypes.NumEntries();
+				if(iA==0) then EndTask(); return; endif;
+				xQuery.SetType(m_axAffectedTypes[0], false);
+				for(j=1)cond(j<iA)iter(j++)do
+					xQuery.SetType(m_axAffectedTypes[j], true);
+				endfor;
+				//Kr1s1m: We use the previous two querys to generate the exclude lists.
+				//Kr1s1m: And we prepare the main query by setting it to exclude those.
+				xFriendlyQuery.Execute(xFriendlyList);
+				xExceptionsQuery.Execute(xExceptionsList);
+				xQuery.Exclude(xFriendlyList, true);
+				xQuery.Exclude(xExceptionsList, true);
+				
+				//Kr1s1m: Finally, we start stunning the main list if the execution of the previously prepared query succeeds.
+				if(xQuery.Execute(xList))then
 					var int i, iC = xList.NumEntries();
-						for(i=0)cond(i<iC)iter(i++)do
-							var ^CFightingObj pxFight = cast<CFightingObj>(xList[i].GetObj());
-							if(pxFight!=null && !pxFight^.GetTransportObj().IsValid())then
-								var bool bTrappedAlready=pxFight^.IsTrapped();
-								if(canBeAffected(pxFight))then
-									pxFight^.SetTrappedTime(m_fTime);
-								endif;
-								if(!bTrappedAlready)then
-									pxFight^.SetAnim("standanim",3);
-								endif;
-//								pxFight^.SetAnim("standanim",3);
+					for(i=0)cond(i<iC)iter(i++)do
+						var ^CFightingObj pxFight = cast<CFightingObj>(xList[i].GetObj());
+						if(pxFight!=null && !pxFight^.GetTransportObj().IsValid())then
+							var bool bTrappedAlready=pxFight^.IsTrapped();
+							pxFight^.SetTrappedTime(m_fTime);
+							if(!bTrappedAlready)then
+								pxFight^.SetAnim("standanim",3);
 							endif;
-						endfor;
+							//pxFight^.SetAnim("standanim",3);
+						endif;
+					endfor;
 				endif;
 			endif;
 			if(m_fAnimLength>m_fTimeOffSet)then
