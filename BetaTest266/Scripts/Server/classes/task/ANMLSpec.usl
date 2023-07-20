@@ -277,7 +277,7 @@ class CStunningRoar inherit CActionTask
 		SetName("StunRoar");
 		m_fRadius = 10.0f;
 		
-		//Kr1s1m: The affected by the stun classes are set here.
+		//Kr1s1m: The affected by the stun unit types are set here.
 		//Kr1s1m: You need to use the four letter CFourCC type codes and add them as entries.
 		if(m_axAffectedTypes.NumEntries()==0)then
 			var CFourCC xANML = "ANML";
