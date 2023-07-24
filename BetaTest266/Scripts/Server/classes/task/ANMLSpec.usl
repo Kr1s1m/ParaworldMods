@@ -281,13 +281,14 @@ class CStunningRoar inherit CActionTask
 		//Kr1s1m: You need to use the four letter CFourCC type codes and add them as entries.
 		if(m_axAffectedTypes.NumEntries()==0)then
 			var CFourCC xANML = "ANML";
-			m_axAffectedTypes.AddEntry(xANML);
 			var CFourCC xCHTR = "CHTR";
+			m_axAffectedTypes.AddEntry(xANML);
 			m_axAffectedTypes.AddEntry(xCHTR);
 		endif;
 		
 		//Kr1s1m: The exception units are set here.
-		//Kr1s1m: Add a class name of a unit as entry bellow to have that unit ignored.
+		//Kr1s1m: Add a class name of a unit from the affected types as entry bellow to have that specific unit ignored.
+		//Kr1s1m: Comment the code bellow to remove exceptions and instead stun all units from the affected types.
 		if(m_asExceptionClasses.NumEntries()==0)then
 			m_asExceptionClasses.AddEntry("aje_tyrannosaurus");
 			m_asExceptionClasses.AddEntry("aje_atroxosaurus");
@@ -295,7 +296,6 @@ class CStunningRoar inherit CActionTask
 			m_asExceptionClasses.AddEntry("aje_catapult_rex_spear");
 			m_asExceptionClasses.AddEntry("seas_rex");
 		endif;
-		
 	endconstructor;
 	
 	export proc void Save(^CUOFWriterNode p_pxWriterNode)
@@ -378,6 +378,9 @@ class CStunningRoar inherit CActionTask
 			var int iOwner = pxHandle^.GetOwner();
 			if(iOwner>=0)then
 				
+				//Kr1s1m: If no type is affected by the stun then we have nothing else to do in this function. End task.
+				if(m_axAffectedTypes.NumEntries()==0) then EndTask(); return; endif;
+				
 				var CObjQuery xQuery, xExceptionsQuery;
 				var CObjList xList, xExceptionsList;
 				
@@ -386,34 +389,31 @@ class CStunningRoar inherit CActionTask
 				//if(pxEnemies==null) then EndTask(); return; endif;
 				//pxEnemies^.CopySorted(xList, pxHandle^.GetPos(), fRange);
 				
-				//Kr1s1m: Instead, we first preapare a query which will later help filter and exclude all exception classes in a radius.
-				//Kr1s1m: Thus, we set and append to the query each subsequent class from the exception array field.
-				xExceptionsQuery.RegionCircle(pxHandle^.GetPos(), fRange);
-				var int i, iE = m_asExceptionClasses.NumEntries();
-				if(iE==0) then EndTask(); return; endif;
-				xExceptionsQuery.SetClass(m_asExceptionClasses[0], false);
-				for(i=1)cond(i<iE)iter(i++)do
-					xExceptionsQuery.SetClass(m_asExceptionClasses[i], true);
-				endfor;
-				xExceptionsQuery.SetOwner(iOwner);
-				CSrvWrap.GetDiplomacyMgr().AddMyEnemiesToSearch(iOwner, xExceptionsQuery);
-				
-				
-				//Kr1s1m: Then we setup the main query which will gather all objects of the desired affected types.
-				//Kr1s1m: We do that by appending each consecutive type from inside the affected types array field.
+				//Kr1s1m: First, setup the main query which will gather all objects of the desired affected types in a radius.
 				xQuery.RegionCircle(pxHandle^.GetPos(), fRange);
-				var int j, iA = m_axAffectedTypes.NumEntries();
-				if(iA==0) then EndTask(); return; endif;
 				xQuery.SetType(m_axAffectedTypes[0], false);
-				for(j=1)cond(j<iA)iter(j++)do
-					xQuery.SetType(m_axAffectedTypes[j], true);
-				endfor;
-				xExceptionsQuery.Execute(xExceptionsList);
-				xQuery.Exclude(xExceptionsList, true);
+				//Kr1s1m: Do that by appending each consecutive type from inside the affected types array field.
+				var int i, iA = m_axAffectedTypes.NumEntries();
+				for(i=1)cond(i<iA)iter(i++)do xQuery.SetType(m_axAffectedTypes[i], true); endfor;
 				
-				//Kr1s1m: We start stunning the non-friendly main list if the execution of the previously prepared query succeeds.
+				//Kr1s1m: Then, preapare a query which will help filter and exclude all exception classes in a radius.
+				var int j, iE = m_asExceptionClasses.NumEntries();
+				if(iE>0) then 
+					xExceptionsQuery.RegionCircle(pxHandle^.GetPos(), fRange);
+					xExceptionsQuery.SetClass(m_asExceptionClasses[0], false);
+					//Kr1s1m: Set and append to the query each subsequent class from the exception array field.
+					for(j=1)cond(j<iE)iter(j++)do xExceptionsQuery.SetClass(m_asExceptionClasses[j], true); endfor;
+					xExceptionsQuery.SetOwner(iOwner);
+					CSrvWrap.GetDiplomacyMgr().AddMyEnemiesToSearch(iOwner, xExceptionsQuery);
+					//Kr1s1m: Finally, execute the exceptions query to generate the exceptions list.
+					//Kr1s1m: And then tell the main query to exclude the exceptions, appending that to the query.
+					xExceptionsQuery.Execute(xExceptionsList);
+					xQuery.Exclude(xExceptionsList, true);
+				endif;
+				
+				//Kr1s1m: Start stunning the non-friendly main list if the execution of the main query succeeds.
 				if(xQuery.Execute(xList))then
-					var int i, iC = xList.NumEntries(), iE = m_asExceptionClasses.NumEntries();
+					var int i, iC = xList.NumEntries();
 					for(i=0)cond(i<iC)iter(i++)do
 						var ^CFightingObj pxFight = cast<CFightingObj>(xList[i].GetObj());
 						//Kr1s1m: Since the main query also picks up friendly objects we check that so we can skip stunning them
