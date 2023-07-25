@@ -391,19 +391,23 @@ class CStunningRoar inherit CActionTask
 				
 				//Kr1s1m: First, setup the main query which will gather all objects of the desired affected types in a radius.
 				xQuery.RegionCircle(pxHandle^.GetPos(), fRange);
+				//Kr1s1m: Add the initial type to the query.
 				xQuery.SetType(m_axAffectedTypes[0], false);
-				//Kr1s1m: Do that by appending each consecutive type from inside the affected types array field.
+				//Kr1s1m: Continue by appending each consecutive type from inside the affected types array field.
 				var int i, iA = m_axAffectedTypes.NumEntries();
 				for(i=1)cond(i<iA)iter(i++)do xQuery.SetType(m_axAffectedTypes[i], true); endfor;
 				
-				//Kr1s1m: Then, preapare a query which will help filter and exclude all exception classes in a radius.
+				//Kr1s1m: Then, preapare a query which will help filter and exclude all exception classes in a radius...
 				var int j, iE = m_asExceptionClasses.NumEntries();
+				//Kr1s1m: ...only if there are any classes to exclude inside the exception classes field.
 				if(iE>0) then 
 					xExceptionsQuery.RegionCircle(pxHandle^.GetPos(), fRange);
+					//Kr1s1m: Set the initial class of the query.
 					xExceptionsQuery.SetClass(m_asExceptionClasses[0], false);
 					//Kr1s1m: Set and append to the query each subsequent class from the exception array field.
 					for(j=1)cond(j<iE)iter(j++)do xExceptionsQuery.SetClass(m_asExceptionClasses[j], true); endfor;
 					xExceptionsQuery.SetOwner(iOwner);
+					//Kr1s1m: We only care about units from enemy tribes in diplomacy.
 					CSrvWrap.GetDiplomacyMgr().AddMyEnemiesToSearch(iOwner, xExceptionsQuery);
 					//Kr1s1m: Finally, execute the exceptions query to generate the exceptions list.
 					//Kr1s1m: And then tell the main query to exclude the exceptions, appending that to the query.
