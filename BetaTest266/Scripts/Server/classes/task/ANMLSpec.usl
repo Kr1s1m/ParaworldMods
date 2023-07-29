@@ -971,12 +971,36 @@ class CMammothTrumpet inherit CActionTask
 endclass;
 
 class CPaw inherit CActionTask
-
+	//Kr1s1m: Promoted variable used for the radius of the effect inside USLOnTick to be a field of the class
+	const real 			m_fRange = 30.0; // must NOT be 0.0;
+	///////////////////////////////////
 	var CObjHndl		m_xHandle;
 	var string			m_sState;
+	
+	//Kr1s1m: Added these two arrays as fields of the class to gain control over the damage reduction effect
+	var array CFourCC		m_axAffectedTypes;
+	var array string 		m_asExceptionClasses;
 
 	export constructor()
 		SetName("Paw");
+		
+		//Kr1s1m: The affected by the damage reduction "paw" effect unit types are set here.
+		//Kr1s1m: You need to use the four letter CFourCC type codes and add them as entries.
+		if(m_axAffectedTypes.NumEntries()==0)then
+			var CFourCC xANML = "ANML";
+			var CFourCC xCHTR = "CHTR";
+			m_axAffectedTypes.AddEntry(xANML);
+			m_axAffectedTypes.AddEntry(xCHTR);
+		endif;
+		
+		//Kr1s1m: The exception units are set here.
+		//Kr1s1m: Add a class name of a unit from the affected types as entry bellow to have that specific unit ignored.
+		//Kr1s1m: Comment the code bellow to remove exceptions and instead "paw" all units from the affected types.
+		if(m_asExceptionClasses.NumEntries()==0)then
+			m_asExceptionClasses.AddEntry("aje_atroxosaurus");
+			m_asExceptionClasses.AddEntry("ninigi_seismosaurus");
+			m_asExceptionClasses.AddEntry("seas_rex");
+		endif;
 	endconstructor;
 	
 	export proc void Save(^CUOFWriterNode p_pxWriterNode)
@@ -1032,18 +1056,43 @@ class CPaw inherit CActionTask
 			//calc
 			var int iOwner = pxHandle^.GetOwner();
 			if(iOwner>=0)then
-				var real fRange = 30.0; // must NOT be 0.0; 
-				var CObjList xList;
-				var ^CObjList pxEnemies=CSrvWrap.GetObjMgr()^.GetOwnerEnemyList(iOwner);
-				if(pxEnemies==null) then return; endif;
-				pxEnemies^.CopySorted(xList, pxHandle^.GetPos(), fRange);
-				var int i, iC = xList.NumEntries();
-				for(i=0)cond(i<iC)iter(i++)do
-					var ^CFightingObj pxFight = cast<CFightingObj>(xList[i].GetObj());
-					if(pxFight!=null)then
-						pxFight^.SetPawEffect();
-					endif;
-				endfor;
+				//Kr1s1m: If no type can be affected by the "paw" effect then we have nothing else to do in this function. End task.
+				if(m_axAffectedTypes.NumEntries()==0) then EndTask(); return; endif;
+				
+				var CObjList xList, xExceptionsList;
+				var CObjQuery xQuery, xExceptionsQuery;
+				
+				//Kr1s1m: This was the original logic that used to fill up the list of objects to be affected by Paw.
+				//var ^CObjList pxEnemies=CSrvWrap.GetObjMgr()^.GetOwnerEnemyList(iOwner);
+				//if(pxEnemies==null) then return; endif;
+				//pxEnemies^.CopySorted(xList, pxHandle^.GetPos(), m_fRange);
+				
+				//Kr1s1m: To understand the logic bellow please refer to the comments in USLOnTick function of CStunningRoar.
+				xQuery.RegionCircle(pxHandle^.GetPos(), m_fRange);
+				xQuery.SetType(m_axAffectedTypes[0], false);
+				var int i, iA = m_axAffectedTypes.NumEntries();
+				for(i=1)cond(i<iA)iter(i++)do xQuery.SetType(m_axAffectedTypes[i], true); endfor;
+				
+				var int j, iE = m_asExceptionClasses.NumEntries();
+				if(iE>0) then 
+					xExceptionsQuery.RegionCircle(pxHandle^.GetPos(), m_fRange);
+					xExceptionsQuery.SetClass(m_asExceptionClasses[0], false);
+					for(j=1)cond(j<iE)iter(j++)do xExceptionsQuery.SetClass(m_asExceptionClasses[j], true); endfor;
+					xExceptionsQuery.SetOwner(iOwner);
+					CSrvWrap.GetDiplomacyMgr().AddMyEnemiesToSearch(iOwner, xExceptionsQuery);
+					xExceptionsQuery.Execute(xExceptionsList);
+					xQuery.Exclude(xExceptionsList, true);
+				endif;
+				
+				if(xQuery.Execute(xList))then
+					var int i, iC = xList.NumEntries();
+					for(i=0)cond(i<iC)iter(i++)do
+						var ^CFightingObj pxFight = cast<CFightingObj>(xList[i].GetObj());
+						if(pxFight!=null)then
+							pxFight^.SetPawEffect();
+						endif;
+					endfor;
+				endif;
 				if(pxHandle^.GetClassName()=="hu_triceratops"||pxHandle^.GetClassName()=="hu_ballista_titan")then
 					CFightingObj.ShakeZone(pxHandle^.GetPos(),xList);
 				endif;
