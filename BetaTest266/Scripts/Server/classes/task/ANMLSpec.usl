@@ -1059,8 +1059,8 @@ class CPaw inherit CActionTask
 				//Kr1s1m: If no type can be affected by the "paw" effect then we have nothing else to do in this function. End task.
 				if(m_axAffectedTypes.NumEntries()==0) then EndTask(); return; endif;
 				
-				var CObjList xList, xExceptionsList;
-				var CObjQuery xQuery, xExceptionsQuery;
+				var CObjList xList, xExceptionsList, xFriendlyList;
+				var CObjQuery xQuery, xExceptionsQuery, xFriendlyQuery;
 				
 				//Kr1s1m: This was the original logic that used to fill up the list of objects to be affected by Paw.
 				//var ^CObjList pxEnemies=CSrvWrap.GetObjMgr()^.GetOwnerEnemyList(iOwner);
@@ -1083,6 +1083,14 @@ class CPaw inherit CActionTask
 					xExceptionsQuery.Execute(xExceptionsList);
 					xQuery.Exclude(xExceptionsList, true);
 				endif;
+				
+				//Kr1s1m: Generate a list of frindly units in radius of the ability so we can exclude them
+				//Kr1s1m: This is needed because we need to pass a correct list to ShakeZone().
+				xFriendlyQuery.RegionCircle(pxHandle^.GetPos(), m_fRange);
+				xFriendlyQuery.SetOwner(iOwner);
+				CSrvWrap.GetDiplomacyMgr().AddMyFriendsToSearch(iOwner, xFriendlyQuery);
+				xFriendlyQuery.Execute(xFriendlyList);
+				xQuery.Exclude(xFriendlyList);
 				
 				if(xQuery.Execute(xList))then
 					var int i, iC = xList.NumEntries();
