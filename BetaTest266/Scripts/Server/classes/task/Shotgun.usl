@@ -6,6 +6,7 @@ class CShotgun inherit CSpecialActionTask
 	const real	m_fDamageOnMainTarget=50.0f; 				// Damage in percent inflicted on the main target.
 	const real	m_fMinimalDamageOnMainTarget=200.0f; 		// Minimal damage in hitpoints the weapon inflicts on the main target.
 	const real	m_fMaximalDamageOnMainTarget=2000.0f; 		// Maximal damage in hitpoints the weapon inflicts on the main target.
+	const real  m_fDamageOnSpecialClasses=10.0f;			// Kr1s1m: Damage in percent inflicted to special classes from m_asSpeacialClasses
 
 	const real	m_fDamageOnCollateralTargets=50.0f; 		// Damage in percent inflicted on the collateral targets.
 	const real	m_fMinimalDamageOnCollateralTargets=200.0f;	// Minimal damage in hitpoints the weapon inflicts on the collateral targets.
@@ -23,6 +24,8 @@ class CShotgun inherit CSpecialActionTask
 	var CObjList		m_xCollateralDamage;
 	//Kr1s1m: Added an array field to store the affected by the collateral damage types.
 	var array CFourCC	m_axCollateralAffectedTypes;
+	//Kr1s1m: Added an array field to store the special case classes.
+	var array string	m_asSpeacialClasses;
 
 	var CFourCC			m_xFCCRightHandLink;
 	var CFourCC			m_xFCCShieldLink;
@@ -48,6 +51,16 @@ class CShotgun inherit CSpecialActionTask
 			m_axCollateralAffectedTypes.AddEntry(xNEST);
 			m_axCollateralAffectedTypes.AddEntry(xBLDG);
 			m_axCollateralAffectedTypes.AddEntry(xFGHT);
+		endif;
+		//Kr1s1m: The treated in a special way by the collateral damage exception CHTR units are set here.
+		//Kr1s1m: Add a class name of a CHTR unit as entry bellow to have that specific unit treated unlike the rest of CHTR.
+		//Kr1s1m: Comment the code bellow to remove exceptions and instead treat all CHTR units equally.
+		if(m_asSpeacialClasses.NumEntries()==0)then
+			m_asSpeacialClasses.AddEntry("hu_avatar");
+			m_asSpeacialClasses.AddEntry("hu_berserk_statue_01");
+			m_asSpeacialClasses.AddEntry("hu_berserk_statue_02");
+			m_asSpeacialClasses.AddEntry("hu_berserk_statue_03");
+			m_asSpeacialClasses.AddEntry("hu_berserk_statue_04");
 		endif;
 		m_xFCCShieldLink="Shld";
 		m_xFCCRightHandLink="HndR";
@@ -218,7 +231,10 @@ class CShotgun inherit CSpecialActionTask
 					for(i=0)cond(i<m_xCollateralDamage.NumEntries())iter(i++)do
 						var ^CFightingObj pxCollateralDamageObj = cast<CFightingObj>(m_xCollateralDamage[i].GetObj());
 						if(pxCollateralDamageObj==null)then continue; endif;
-						if(pxCollateralDamageObj^.GetType()=="CHTR" && !pxCollateralDamageObj^.GetTransportObj().IsValid() && pxFighter^.m_iSizeClass>pxCollateralDamageObj^.m_iSizeClass && !pxCollateralDamageObj^.GetOnWall())then
+						if(pxCollateralDamageObj^.GetType()=="CHTR" 
+						  && !pxCollateralDamageObj^.GetTransportObj().IsValid() 
+						  && pxFighter^.m_iSizeClass>pxCollateralDamageObj^.m_iSizeClass
+						  && !pxCollateralDamageObj^.GetOnWall())then
 							Random.Seed();
 							var vec3 vVariation={0.0,0.0,0.0};
 							vVariation.SetX((Random.GetInt()%150).ToReal()/100.0f);
@@ -272,6 +288,10 @@ class CShotgun inherit CSpecialActionTask
 			if(!m_bGroundShot)then
 				if(pxEnemy^.GetType()=="BLDG" || pxEnemy^.GetType()=="NEST")then
 					fDamage=(pxEnemy^.GetHitpoints()/100.0)*10.0f;
+				//Kr1s1m: If the targeted enemy class name is one of those in the special case classes array...
+				elseif(m_asSpeacialClasses.FindEntry(pxEnemy^.GetClassName())>-1)then
+					//Kr1s1m: ...then perform a special calculation.
+					fDamage=(pxEnemy^.GetHitpoints()/100.0)*m_fDamageOnSpecialClasses;
 				else
 					fDamage=(pxEnemy^.GetHitpoints()/100.0)*m_fDamageOnMainTarget;
 				endif;
@@ -286,6 +306,10 @@ class CShotgun inherit CSpecialActionTask
 					if(pxCollateralDamageObj==null)then continue; endif;
 					if(pxCollateralDamageObj^.GetType()=="BLDG" || pxCollateralDamageObj^.GetType()=="NEST")then
 						fDamage=(pxCollateralDamageObj^.GetHitpoints()/100.0)*10.0f;
+					//Kr1s1m: If the current collateral object's class name is one of those in the special case classes array...
+					elseif(m_asSpeacialClasses.FindEntry(pxCollateralDamageObj^.GetClassName())>-1)then
+						//Kr1s1m: ...then perform a special calculation.
+						fDamage=(pxCollateralDamageObj^.GetHitpoints()/100.0)*m_fDamageOnSpecialClasses;
 					else
 						fDamage=(pxCollateralDamageObj^.GetHitpoints()/100.0)*m_fDamageOnCollateralTargets;
 					endif;
@@ -378,7 +402,7 @@ class CShotgun inherit CSpecialActionTask
 				//Kr1s1m: Determine whether the CFightingObj has friendly diplomacy towards current Cole object.
 				var bool bIsFriendly = CSrvWrap.GetDiplomacyMgr().GetIsFriend(iOwner, pxObj^.GetOwner());
 				if(pxObj==null)then continue; endif;
-				if(bIsFriendly)then continue; endif;
+				if(bIsFriendly)then continue; endif; //Kr1s1m: Skip allies. Comment this line to test on them.
 				if(pxObj^.GetTransportObj().IsValid()||pxObj^.GetOnWall())then continue; endif;
 				m_xCollateralDamage.AddEntry(xList[i]);
 			endfor;
