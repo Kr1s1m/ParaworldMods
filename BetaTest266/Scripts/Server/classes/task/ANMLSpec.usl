@@ -675,11 +675,15 @@ class CBrachioHarvest inherit CSpecialActionTask
 			var int iOwner = pxBrachio^.GetOwner();
 			if(iOwner>=0)then
 				var real fRange = 20.0; // must NOT be 0.0; 
-				var real fDmg = 100.0;
+				var real fDmg = 200.0;  //Kr1s1m: Original value 100.0 was changed due to new actual damage formula.
 				var real fEndDmg = 10.0;
-				var CObjList xList;
-				var ^CObjList pxEnemies=CSrvWrap.GetObjMgr()^.GetOwnerEnemyList(iOwner);
-				if(pxEnemies==null) then return; endif;
+				
+				var CObjQuery xQuery;
+				var CObjList xList, xListSorted;
+				
+				//Kr1s1m: This was the original logic which used to collect the enemies from the world
+				//var ^CObjList pxEnemies=CSrvWrap.GetObjMgr()^.GetOwnerEnemyList(iOwner);
+				//if(pxEnemies==null) then return; endif;
 				//Hack for testing BrachioStomp with own units
 				/*
 				var CObjQuery xQ;
@@ -687,22 +691,36 @@ class CBrachioHarvest inherit CSpecialActionTask
 				xQ.SetRegion(CSrvWrap.GetRegionMgr().GetWorldRgnHndl());
 				xQ.Execute(pxEnemies^);
 				/**/
-				pxEnemies^.CopySorted(xList, pxBrachio^.GetPos(), fRange);
-				var int i, iC = xList.NumEntries();
-				for(i=iC-1)cond(i>=0)iter(i--)do
-					var ^CFightingObj pxFight = cast<CFightingObj>(xList[i].GetObj());
-					if(pxFight==null)then continue; endif;
-					var real fDistance = (pxFight^.GetPos()-pxBrachio^.GetPos()).Abs2();
-					var real fActualDmg = ((fDmg-fEndDmg)*(fDistance/fRange)) + fEndDmg;
-					pxFight^.TakeDirectMeleeDmg(fActualDmg,m_xWorker);
-					if(pxFight^.GetTransportObj().IsValid())then continue; endif;
-					if(pxFight^.m_iSizeClass>0&&pxFight^.m_iSizeClass <= 7)then
-						var vec3 vDirection = pxFight^.GetPos() - pxBrachio^.GetPos();
-						vDirection.Normalize();
-						vDirection.SetZ(0.5);
-						pxFight^.SetHitReactionTimer(0.0,vDirection*10.0);
-					endif;
-				endfor;
+				
+				//Kr1s1m: Instead do a type query
+				xQuery.SetType("CHTR", false);
+				xQuery.SetType("ANML", true);
+				xQuery.SetType("VHCL", true);
+				//xQuery.SetType("SHIP", true);
+				xQuery.SetType("NEST", true);
+				xQuery.SetType("BLDG", true);
+				
+				if(xQuery.Execute(xList))then
+					xList.CopySorted(xListSorted, pxBrachio^.GetPos(), fRange);
+					var int i, iC = xListSorted.NumEntries();
+					for(i=iC-1)cond(i>=0)iter(i--)do
+						var ^CFightingObj pxFight = cast<CFightingObj>(xListSorted[i].GetObj());
+						//Kr1s1m: Check if pxFight is friendly so we can skip affecting it
+						var bool bIsFriendly = CSrvWrap.GetDiplomacyMgr().GetIsFriend(iOwner, pxFight^.GetOwner());
+						if(pxFight==null || bIsFriendly)then continue; endif;
+						var real fDistance = (pxFight^.GetPos()-pxBrachio^.GetPos()).Abs2();
+						//Kr1s1m: Distance is now correctly inversely proportional to the damage.
+						var real fActualDmg = ((fDmg-fEndDmg)*(1.0 - (fDistance/fRange))) + fEndDmg;
+						pxFight^.TakeDirectMeleeDmg(fActualDmg,m_xWorker);
+						if(pxFight^.GetTransportObj().IsValid())then continue; endif;
+						if(pxFight^.m_iSizeClass>0&&pxFight^.m_iSizeClass <= 7)then
+							var vec3 vDirection = pxFight^.GetPos() - pxBrachio^.GetPos();
+							vDirection.Normalize();
+							vDirection.SetZ(0.5);
+							pxFight^.SetHitReactionTimer(0.0,vDirection*10.0);
+						endif;
+					endfor;
+				endif;
 			endif;
 			var CGameTime xNow=CTimeMgr.Get().GetTime();
 			var real fRemAnimTime=m_fAnimL-(xNow-m_xAnimStart).GetSecondsF();
