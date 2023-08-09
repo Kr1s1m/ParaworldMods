@@ -693,6 +693,7 @@ class CBrachioHarvest inherit CSpecialActionTask
 				/**/
 				
 				//Kr1s1m: Instead do a type query
+				xQuery.RegionCircle(pxBrachio^.GetPos(), fRange);
 				xQuery.SetType("CHTR", false);
 				xQuery.SetType("ANML", true);
 				xQuery.SetType("VHCL", true);
