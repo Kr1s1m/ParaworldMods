@@ -6244,7 +6244,7 @@ class CTrackerDino inherit CAnimal
 	
 	//Kr1s1m: Added a constructor to initialize the tracked types array
 	export constructor()
-		//Kr1s1m: The tracked units to chase after are set here.
+		//Kr1s1m: The tracked unit types to hunt down are set here.
 		//Kr1s1m: You need to use the four letter CFourCC type codes and add them as entries.
 		if(m_axTrackedTypes.NumEntries()==0)then
 			var CFourCC xCHTR = "CHTR";
@@ -6255,10 +6255,6 @@ class CTrackerDino inherit CAnimal
 			m_axTrackedTypes.AddEntry(xANML);
 			m_axTrackedTypes.AddEntry(xVHCL);
 			m_axTrackedTypes.AddEntry(xBLDG);
-		endif;
-		if(m_asNegativeAttributes.NumEntries()==0)then
-			m_asNegativeAttributes.AddEntry("flying_unit");
-			m_asNegativeAttributes.AddEntry("not_detectable");
 		endif;
 	endconstructor;
 	
@@ -6314,22 +6310,18 @@ class CTrackerDino inherit CAnimal
 	endproc;
 	
 	proc bool CheckForNearbyEnemies()
-	
+		//Kr1s1m: If no type is being tracked then our job in this function is done.
 		if(m_axTrackedTypes.NumEntries()==0)then return false; endif;
 		
 		var CObjQuery xQuery;
 		var CObjList xList, xListSorted;
-		
+		//Kr1s1m: First, prepare the main query which will gather all objects of the desired tracked types in a radius range.
 		xQuery.RegionCircle(GetPos(), RADAR_RANGE);
-		
+		//Kr1s1m: Add the initial type to the query.
 		xQuery.SetType(m_axTrackedTypes[0], false);
+		//Kr1s1m: Continue by appending the query with each consecutive type from inside the tracked unit types array field.
 		var int i, iT = m_axTrackedTypes.NumEntries();
 		for(i=1)cond(i<iT)iter(++i)do xQuery.SetType(m_axTrackedTypes[i], true); endfor;
-		
-		if(m_asNegativeAttributes.NumEntries()>0)then
-			var int i, iA = m_asNegativeAttributes.NumEntries();
-			for(i=0)cond(i<iA)iter(++i)do xQuery.SetAttribsNeg(m_asNegativeAttributes[i], true); endfor;
-		endif;
 		
 		//Kr1s1m: Disabled this part so we can also hunt/track wild animals
 		//CSrvWrap.GetDiplomacyMgr().AddMyEnemiesToSearch(GetOwner(), xQuery, false);
@@ -6340,6 +6332,7 @@ class CTrackerDino inherit CAnimal
 		var int iEnemyTribeCHTRorANML=-1, iEnemyTribeVHCL=-1, iEnemyTribeBLDG=-1;
 		var int iWildAggresive=-1, iWildNeutral=-1;
 		
+		//Kr1s1m: If nothing valid was picked up from the world then our job in this function is done.
 		if(!xQuery.Execute(xList))then return false; endif;
 		
 		xList.CopySorted(xListSorted, GetPos(), RADAR_RANGE);
@@ -6348,11 +6341,12 @@ class CTrackerDino inherit CAnimal
 			var int i, iC=xListSorted.NumEntries();
 			for(i=0)cond(i<iC)iter(++i)do
 				if(xListSorted[i].IsValid())then
-					var ^CGameObj pxO=xListSorted[i].GetObj();
 					//Kr1s1m: The next two lines allow the usage of the interface specific to child class CFightingObj.
+					var ^CGameObj pxO=xListSorted[i].GetObj();
 					var ^CFightingObj pxF=cast<CFightingObj>(xListSorted[i].GetObj());
 					var bool bIsFriendly = CSrvWrap.GetDiplomacyMgr().GetIsFriend(GetOwner(), pxF^.GetOwner());
-					if(pxO!=null && !bIsFriendly && !pxO^.IsInWater())then//Kr1s1m: Skip the units which are not on ground or friendly.
+					//Kr1s1m: Only consider valid non-allied units which are on the ground.
+					if(pxO!=null && !bIsFriendly && !pxO^.GetIsVanished() && !pxO^.IsInWater() && !pxO^.CanFly())then
 						if(!pxF^.IsWildAnimal() && 
 						   (pxF^.GetType()=="CHTR" || pxF^.GetType()=="ANML") && iEnemyTribeCHTRorANML==-1)then
 						    //Kr1s1m: If the CFightingObj is an enemy unit of type CHTR or ANML & such index is not yet stashed save that index.
@@ -6372,7 +6366,9 @@ class CTrackerDino inherit CAnimal
 							iWildAggresive=i;
 						endif;
 						if(pxF^.IsWildAnimal() && !pxF^.IsAggressive() && iWildNeutral==-1)then
-							//Kr1s1m: Same as comment above this one, but for non-agressive wild creatures (both green and yellow).
+							//Kr1s1m: Same as comment above this one, but for non-agressive wild creatures (both green and yellow)...
+							//Kr1s1m: ...except if the current CFightingObj has "is_baby" attribute (<1.0f grow value) then skip it.
+							if(pxF^.GetGrowUpValue()<1.0f)then continue; endif;
 							iWildNeutral=i;
 						endif;
 						pxTarget=pxO;
