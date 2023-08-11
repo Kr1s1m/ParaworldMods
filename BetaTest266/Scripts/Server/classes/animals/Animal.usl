@@ -6239,8 +6239,6 @@ class CTrackerDino inherit CAnimal
 	
 	//Kr1s1m: Added array to store the tracked by the dino unit types
 	var array CFourCC	m_axTrackedTypes;
-	//Kr1s1m: Added array to store the negative tracking attributes
-	var array string	m_asNegativeAttributes;
 	
 	//Kr1s1m: Added a constructor to initialize the tracked types array
 	export constructor()
