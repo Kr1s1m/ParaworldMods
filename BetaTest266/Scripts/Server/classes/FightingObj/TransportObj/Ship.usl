@@ -2445,17 +2445,15 @@ class CTorpedoTurtle inherit CShip
 	//Kr1s1m: Added array to keep track of targeted unit types
 	var array CFourCC	m_axTargetedTypes;
 
-
 	export constructor()
 		m_bBooooomed=false;
-		
-		//Kr1s1m: The targeted units to chase after are set here.
+		//Kr1s1m: The targeted unit types to target and chase after are set here.
 		//Kr1s1m: You need to use the four letter CFourCC type codes and add them as entries.
 		if(m_axTargetedTypes.NumEntries()==0)then
 			var CFourCC xSHIP = "SHIP";
 			var CFourCC xANML = "ANML";
-			var CFourCC xBLDG = "BLDG";
 			var CFourCC xVHCL = "VHCL";
+			var CFourCC xBLDG = "BLDG";
 			m_axTargetedTypes.AddEntry(xSHIP);
 			m_axTargetedTypes.AddEntry(xANML);
 			m_axTargetedTypes.AddEntry(xBLDG);
@@ -2527,6 +2525,7 @@ class CTorpedoTurtle inherit CShip
 	
 	proc bool CheckForNearbyEnemies()
 	
+		//Kr1s1m: If no type is being targeted then our job in this function is done.
 		if(m_axTargetedTypes.NumEntries()==0)then return false; endif;
 		
 		var CObjQuery xQuery;
@@ -2536,8 +2535,8 @@ class CTorpedoTurtle inherit CShip
 		//Kr1s1m: Add the initial type to the query.
 		xQuery.SetType(m_axTargetedTypes[0], false);
 		//Kr1s1m: Continue by appending the query with each consecutive type from inside the targeted unit types array field.
-		var int i, iA = m_axTargetedTypes.NumEntries();
-		for(i=1)cond(i<iA)iter(i++)do xQuery.SetType(m_axTargetedTypes[i], true); endfor;
+		var int i, iT = m_axTargetedTypes.NumEntries();
+		for(i=1)cond(i<iT)iter(i++)do xQuery.SetType(m_axTargetedTypes[i], true); endfor;
 		
 		//Kr1s1m: This code was part of the old query logic
 		//var int i, iOwner=GetOwner();
@@ -2553,28 +2552,29 @@ class CTorpedoTurtle inherit CShip
 		var ^CGameObj pxTarget=null;
 		var CObjList xList, xListSorted;
 		
-		//Kr1s1m: If the main query picks up anything valid in the radar range... 
-		if(xQuery.Execute(xList))then
-			//Kr1s1m: ...then sort the generated list by distance.
-			xList.CopySorted(xListSorted, GetPos(), RADAR_RANGE);
-		endif;
-		
 		//Kr1s1m: Create and initialize a bunch of variables to store indices of objects in radar that are of interest.
 		//Kr1s1m: Later these will help easily create priority targeting, without the need of booleans or O(n^2).
 		var int iCitywall=-1, iPirateBoss=-1;
 		var int iEnemyTribeSHIP=-1, iEnemyTribeVHCLorANML=-1, iEnemyTribeFloating=-1, iEnemyHarbour=-1;
 		var int iWildAggresive=-1, iWildNeutral=-1;
 	
+		//Kr1s1m: If the main query picks up anything valid in the radar range... 
+		if(xQuery.Execute(xList))then
+			//Kr1s1m: ...then sort the generated list by distance.
+			xList.CopySorted(xListSorted, GetPos(), RADAR_RANGE);
+		endif;
+		
+		//Kr1s1m: If anything at all was copied inside xListSorted continue with the main logic.
 		if(xListSorted.NumEntries() > 0)then
 			var int i, iC=xListSorted.NumEntries();
 			for(i=0) cond(i<iC) iter(++i)do
 				if(xListSorted[i].IsValid())then
-					var ^CGameObj pxO=xListSorted[i].GetObj();
 					//Kr1s1m: The next two lines allow the usage of the interface specific to child class CFightingObj.
+					var ^CGameObj pxO=xListSorted[i].GetObj();
 					var ^CFightingObj pxF=cast<CFightingObj>(xListSorted[i].GetObj());
 					var bool bIsFriendly = CSrvWrap.GetDiplomacyMgr().GetIsFriend(iOwner, pxF^.GetOwner());
-					if(pxO!=null)then
-						if(bIsFriendly)then continue; endif;//Kr1s1m: Skip friendly units inside the list.
+					//Kr1s1m: Only consider valid non-allied units which are not flying and not hidden like non-firing submarines.
+					if(pxO!=null && !bIsFriendly && !pxO^.CanFly() && !pxO^.GetIsVanished())then
 						if(pxO^.GetType()=="BLDG")then
 							//Kr1s1m: Check for specific buildings of interest, including campaign ojects and harbours.
 							//Kr1s1m: If there is a match save the index;
@@ -2595,6 +2595,7 @@ class CTorpedoTurtle inherit CShip
 						if(!(pxO^.IsInWater() && pxO^.CanSwim()))then
 							continue;//Kr1s1m: Skip anything that can't swim or is not in the water. De'Morgan's law.
 						endif;
+						//Kr1s1m: Commented old logic bellow.
 						//if(pxO^.GetClassName()=="pirate_boss")then
 							//var CObjQuery xQuery;
 							//xQuery.RegionCircle(GetPos(), 100.0f);
@@ -2622,7 +2623,6 @@ class CTorpedoTurtle inherit CShip
 //							endif;
 //							continue;
 						//endif;
-						if(pxO^.GetIsVanished())then continue; endif; //Kr1s1m: Skip currently invisible units, like non-firing submarines.
 						if(!pxF^.IsWildAnimal() && pxF^.GetType()=="SHIP" && iEnemyTribeSHIP==-1)then 
 							//Kr1s1m: If the CFightingObj is an enemy unit of type SHIP & such index is not yet stashed save that index.
 							iEnemyTribeSHIP=i;
@@ -2642,7 +2642,9 @@ class CTorpedoTurtle inherit CShip
 							iWildAggresive=i;
 						endif;
 						if(pxF^.IsWildAnimal() && !pxF^.IsAggressive() && iWildNeutral==-1)then
-							//Kr1s1m: Same as comment above this one, but for non-agressive wild creatures (both green and yellow).
+							//Kr1s1m: Same as comment above this one, but for non-agressive wild creatures (both green and yellow)...
+							//Kr1s1m: ...except if the current CFightingObj has "is_baby" attribute (<1.0f grow value) then skip it.
+							if(pxF^.GetGrowUpValue()<1.0f)then continue; endif;
 							iWildNeutral=i;
 						endif;
 						pxTarget=pxO;
