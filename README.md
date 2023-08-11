@@ -1,7 +1,10 @@
 # ParaworldMods
 Paraworld game modifications for Parawelt (Paraworld Tavern Discord) modding community
-- game design scripting
+- gameplay scripting
+- game design
 - game balance
+- ui scripting
+- ui enhancements 
 - bug fixes
 - new features
 
