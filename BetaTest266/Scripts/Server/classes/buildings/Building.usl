@@ -8629,6 +8629,14 @@ class CBunker inherit CTower
 	
 endclass;
 
+class CArtefactStorageBuilding inherit CBunker //CBuilding
+
+endclass;
+
+class CHeroPrison inherit CRallyBuilding
+
+endclass;
+
 class CSeasCarrier inherit CSwimmingHarbour
 	
 	var int m_iBuildUpType;
