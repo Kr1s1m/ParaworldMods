@@ -49,7 +49,7 @@ Root {
 	}
 	ActionMenu_012 {
 		Action = 'aje_eusmilus_Build_Aje'
-		Shortcut = 'E'
+		Shortcut = 'B'
 	}
 	ActionMenu_013 {
 		Action = 'aje_pteranodon_Build_Aje'
@@ -77,7 +77,7 @@ Root {
 	}
 	ActionMenu_019 {
 		Action = 'aje_triceratops_archer_Build_Aje'
-		Shortcut = 'E'
+		Shortcut = 'D'
 	}
 	ActionMenu_020 {
 		Action = 'aje_tyrannosaurus_Build_Aje'
@@ -129,11 +129,11 @@ Root {
 	}
 	ActionMenu_032 {
 		Action = 'aje_huge_farm_Build_Aje'
-		Shortcut = 'H'
+		Shortcut = 'Q'
 	}
 	ActionMenu_033 {
 		Action = 'aje_launchpad_zeppelin_Build_Aje'
-		Shortcut = 'Z'
+		Shortcut = 'A'
 	}
 	ActionMenu_034 {
 		Action = 'aje_medium_farm_Build_Aje'
@@ -197,7 +197,7 @@ Root {
 	}
 	ActionMenu_049 {
 		Action = 'babbage_s0_Build_Aje'
-		Shortcut = 'E'
+		Shortcut = 'U'
 	}
 	ActionMenu_050 {
 		Action = 'Bela_s0_Build_Aje'
@@ -245,7 +245,7 @@ Root {
 	}
 	ActionMenu_061 {
 		Action = 'aje_archer_1_Build_Aje'
-		Shortcut = 'E'
+		Shortcut = 'W'
 	}
 	ActionMenu_062 {
 		Action = 'aje_archer_2_Build_Aje'
@@ -317,19 +317,19 @@ Root {
 	}
 	ActionMenu_079 {
 		Action = 'aje_worker_Build_Aje'
-		Shortcut = 'W'
+		Shortcut = 'B'
 	}
 	ActionMenu_080 {
 		Action = 'hu_worker_Build_Aje'
-		Shortcut = 'E'
+		Shortcut = 'C'
 	}
 	ActionMenu_081 {
 		Action = 'ninigi_worker_Build_Aje'
-		Shortcut = 'R'
+		Shortcut = 'D'
 	}
 	ActionMenu_082 {
 		Action = 'seas_worker_Build_Aje'
-		Shortcut = 'T'
+		Shortcut = 'E'
 	}
 	ActionMenu_083 {
 		Action = 'aje_catamaran_Build_Aje'
@@ -341,7 +341,7 @@ Root {
 	}
 	ActionMenu_085 {
 		Action = 'aje_liopleurodon_Build_Aje'
-		Shortcut = 'L'
+		Shortcut = 'S'
 	}
 	ActionMenu_086 {
 		Action = 'aje_mosasaurus_Build_Aje'
@@ -361,7 +361,7 @@ Root {
 	}
 	ActionMenu_090 {
 		Action = 'aje_zeppelin_Build_Aje'
-		Shortcut = 'Z'
+		Shortcut = 'A'
 	}
 	ActionMenu_091 {
 		Action = 'AlloScrunch_Moves_Aje'
@@ -489,7 +489,7 @@ Root {
 	}
 	ActionMenu_122 {
 		Action = 'aje_brachiosaurus_catapult_Upgrades_Aje'
-		Shortcut = 'U'
+		Shortcut = 'C'
 	}
 	ActionMenu_123 {
 		Action = 'aje_brachiosaurus_catapult_dino_Upgrades_Aje'
@@ -517,19 +517,19 @@ Root {
 	}
 	ActionMenu_129 {
 		Action = 'aje_more_fishing_1_Upgrades_Aje'
-		Shortcut = 'F'
+		Shortcut = 'H'
 	}
 	ActionMenu_130 {
 		Action = 'aje_more_fishing_2_Upgrades_Aje'
-		Shortcut = 'F'
+		Shortcut = 'H'
 	}
 	ActionMenu_131 {
 		Action = 'aje_more_fishing_3_Upgrades_Aje'
-		Shortcut = 'F'
+		Shortcut = 'H'
 	}
 	ActionMenu_132 {
 		Action = 'aje_more_fishing_4_Upgrades_Aje'
-		Shortcut = 'F'
+		Shortcut = 'H'
 	}
 	ActionMenu_133 {
 		Action = 'tesla_tower_Upgrades_Aje'
@@ -569,19 +569,19 @@ Root {
 	}
 	ActionMenu_142 {
 		Action = 'aje_resource_tool_upgrade_1_Upgrades_Aje'
-		Shortcut = 'L'
+		Shortcut = 'H'
 	}
 	ActionMenu_143 {
 		Action = 'aje_resource_tool_upgrade_2_Upgrades_Aje'
-		Shortcut = 'L'
+		Shortcut = 'H'
 	}
 	ActionMenu_144 {
 		Action = 'aje_resource_tool_upgrade_3_Upgrades_Aje'
-		Shortcut = 'L'
+		Shortcut = 'H'
 	}
 	ActionMenu_145 {
 		Action = 'aje_resource_tool_upgrade_4_Upgrades_Aje'
-		Shortcut = 'L'
+		Shortcut = 'H'
 	}
 	ActionMenu_146 {
 		Action = 'aje_spear_frequency_Upgrades_Aje'
@@ -641,7 +641,7 @@ Root {
 	}
 	ActionMenu_160 {
 		Action = 'warpath_Upgrades_Aje'
-		Shortcut = 'Y'
+		Shortcut = 'F'
 	}
 	ActionMenu_161 {
 		Action = 'medium_tower_Upgrades_Aje'
@@ -661,7 +661,7 @@ Root {
 	}
 	ActionMenu_165 {
 		Action = 'termites_Upgrades_Aje'
-		Shortcut = 'E'
+		Shortcut = 'T'
 	}
 	ActionMenu_166 {
 		Action = 'camouflage_Upgrades_Aje'
@@ -709,15 +709,15 @@ Root {
 	}
 	ActionMenu_177 {
 		Action = 'aje_animal_def_up_1_Upgrades_Aje'
-		Shortcut = 'E'
+		Shortcut = 'J'
 	}
 	ActionMenu_178 {
 		Action = 'aje_animal_def_up_2_Upgrades_Aje'
-		Shortcut = 'E'
+		Shortcut = 'J'
 	}
 	ActionMenu_179 {
 		Action = 'aje_animal_def_up_3_Upgrades_Aje'
-		Shortcut = 'E'
+		Shortcut = 'J'
 	}
 	ActionMenu_180 {
 		Action = 'aje_archer_damage_upgrade_1_Upgrades_Aje'
@@ -765,7 +765,7 @@ Root {
 	}
 	ActionMenu_191 {
 		Action = 'aje_spear_range_Upgrades_Aje'
-		Shortcut = 'Z'
+		Shortcut = 'W'
 	}
 	ActionMenu_192 {
 		Action = 'aje_spear_range_2_Upgrades_Aje'
@@ -885,7 +885,7 @@ Root {
 	}
 	ActionMenu_221 {
 		Action = 'hu_launchpad_zeppelin_Build_Hu'
-		Shortcut = 'Z'
+		Shortcut = 'A'
 	}
 	ActionMenu_222 {
 		Action = 'hu_lumberjack_cottage_Build_Hu'
@@ -969,7 +969,7 @@ Root {
 	}
 	ActionMenu_242 {
 		Action = 'babbage_s0_Build_Hu'
-		Shortcut = 'E'
+		Shortcut = 'U'
 	}
 	ActionMenu_243 {
 		Action = 'Bela_s0_Build_Hu'
@@ -1025,10 +1025,12 @@ Root {
 	}
 	ActionMenu_256 {
 		Action = 'hu_archer_3_Build_Hu'
-		Shortcut = 'Z'
+		Shortcut = 'C'
 	}
 	ActionMenu_257 {
-		Action = 'hu_berserker_3_Build_H
+		Action = 'hu_berserker_3_Build_Hu'
+		Shortcut = 'B'
+	}
 	ActionMenu_000 {
 		Action = 'aje_allosaurus_Build_Aje'
 		Shortcut = 'A'
@@ -1107,7 +1109,7 @@ Root {
 	}
 	ActionMenu_019 {
 		Action = 'aje_triceratops_archer_Build_Aje'
-		Shortcut = 'E'
+		Shortcut = 'D'
 	}
 	ActionMenu_020 {
 		Action = 'aje_tyrannosaurus_Build_Aje'
@@ -1163,7 +1165,7 @@ Root {
 	}
 	ActionMenu_033 {
 		Action = 'aje_launchpad_zeppelin_Build_Aje'
-		Shortcut = 'Z'
+		Shortcut = 'A'
 	}
 	ActionMenu_034 {
 		Action = 'aje_medium_farm_Build_Aje'
@@ -1227,7 +1229,7 @@ Root {
 	}
 	ActionMenu_049 {
 		Action = 'babbage_s0_Build_Aje'
-		Shortcut = 'E'
+		Shortcut = 'U'
 	}
 	ActionMenu_050 {
 		Action = 'Bela_s0_Build_Aje'
@@ -1519,7 +1521,7 @@ Root {
 	}
 	ActionMenu_122 {
 		Action = 'aje_brachiosaurus_catapult_Upgrades_Aje'
-		Shortcut = 'U'
+		Shortcut = 'C'
 	}
 	ActionMenu_123 {
 		Action = 'aje_brachiosaurus_catapult_dino_Upgrades_Aje'
@@ -1599,19 +1601,19 @@ Root {
 	}
 	ActionMenu_142 {
 		Action = 'aje_resource_tool_upgrade_1_Upgrades_Aje'
-		Shortcut = 'L'
+		Shortcut = 'H'
 	}
 	ActionMenu_143 {
 		Action = 'aje_resource_tool_upgrade_2_Upgrades_Aje'
-		Shortcut = 'L'
+		Shortcut = 'H'
 	}
 	ActionMenu_144 {
 		Action = 'aje_resource_tool_upgrade_3_Upgrades_Aje'
-		Shortcut = 'L'
+		Shortcut = 'H'
 	}
 	ActionMenu_145 {
 		Action = 'aje_resource_tool_upgrade_4_Upgrades_Aje'
-		Shortcut = 'L'
+		Shortcut = 'H'
 	}
 	ActionMenu_146 {
 		Action = 'aje_spear_frequency_Upgrades_Aje'
@@ -1671,7 +1673,7 @@ Root {
 	}
 	ActionMenu_160 {
 		Action = 'warpath_Upgrades_Aje'
-		Shortcut = 'Y'
+		Shortcut = 'F'
 	}
 	ActionMenu_161 {
 		Action = 'medium_tower_Upgrades_Aje'
@@ -1691,7 +1693,7 @@ Root {
 	}
 	ActionMenu_165 {
 		Action = 'termites_Upgrades_Aje'
-		Shortcut = 'E'
+		Shortcut = 'T'
 	}
 	ActionMenu_166 {
 		Action = 'camouflage_Upgrades_Aje'
@@ -1739,7 +1741,7 @@ Root {
 	}
 	ActionMenu_177 {
 		Action = 'aje_animal_def_up_1_Upgrades_Aje'
-		Shortcut = 'E'
+		Shortcut = 'J'
 	}
 	ActionMenu_178 {
 		Action = 'aje_animal_def_up_2_Upgrades_Aje'
@@ -1915,7 +1917,7 @@ Root {
 	}
 	ActionMenu_221 {
 		Action = 'hu_launchpad_zeppelin_Build_Hu'
-		Shortcut = 'Z'
+		Shortcut = 'A'
 	}
 	ActionMenu_222 {
 		Action = 'hu_lumberjack_cottage_Build_Hu'
@@ -1999,7 +2001,7 @@ Root {
 	}
 	ActionMenu_242 {
 		Action = 'babbage_s0_Build_Hu'
-		Shortcut = 'E'
+		Shortcut = 'U'
 	}
 	ActionMenu_243 {
 		Action = 'Bela_s0_Build_Hu'
@@ -2175,7 +2177,7 @@ Root {
 	}
 	ActionMenu_286 {
 		Action = 'hu_zeppelin_Build_Hu'
-		Shortcut = 'Z'
+		Shortcut = 'L'
 	}
 	ActionMenu_287 {
 		Action = 'Mammoth_Trumpet_Moves_Hu'
@@ -2431,7 +2433,7 @@ Root {
 	}
 	ActionMenu_350 {
 		Action = 'pennant_Upgrades_Hu'
-		Shortcut = 'Z'
+		Shortcut = 'H'
 	}
 	ActionMenu_351 {
 		Action = 'rhino_shake_off_Upgrades_Hu'
@@ -2587,7 +2589,7 @@ Root {
 	}
 	ActionMenu_389 {
 		Action = 'ninigi_eusmilus_Build_Ninigi'
-		Shortcut = 'E'
+		Shortcut = 'H'
 	}
 	ActionMenu_390 {
 		Action = 'ninigi_kong_Build_Ninigi'
@@ -2679,7 +2681,7 @@ Root {
 	}
 	ActionMenu_412 {
 		Action = 'ninigi_launchpad_zeppelin_Build_Ninigi'
-		Shortcut = 'Z'
+		Shortcut = 'A'
 	}
 	ActionMenu_413 {
 		Action = 'ninigi_lumbermill_Build_Ninigi'
@@ -2763,7 +2765,7 @@ Root {
 	}
 	ActionMenu_433 {
 		Action = 'babbage_s0_Build_Ninigi'
-		Shortcut = 'E'
+		Shortcut = 'U'
 	}
 	ActionMenu_434 {
 		Action = 'Bela_s0_Build_Ninigi'
@@ -2811,7 +2813,7 @@ Root {
 	}
 	ActionMenu_445 {
 		Action = 'ninigi_archer_1_Build_Ninigi'
-		Shortcut = 'E'
+		Shortcut = 'O'
 	}
 	ActionMenu_446 {
 		Action = 'ninigi_archer_2_Build_Ninigi'
@@ -2855,7 +2857,7 @@ Root {
 	}
 	ActionMenu_456 {
 		Action = 'ninigi_spearman_3_Build_Ninigi'
-		Shortcut = 'Z'
+		Shortcut = 'D'
 	}
 	ActionMenu_457 {
 		Action = 'ninigi_sumo_3_Build_Ninigi'
@@ -2875,19 +2877,19 @@ Root {
 	}
 	ActionMenu_461 {
 		Action = 'ninigi_worker_Build_Ninigi'
-		Shortcut = 'W'
+		Shortcut = 'B'
 	}
 	ActionMenu_462 {
 		Action = 'aje_worker_Build_Ninigi'
-		Shortcut = 'E'
+		Shortcut = 'C'
 	}
 	ActionMenu_463 {
 		Action = 'hu_worker_Build_Ninigi'
-		Shortcut = 'R'
+		Shortcut = 'D'
 	}
 	ActionMenu_464 {
 		Action = 'seas_worker_Build_Ninigi'
-		Shortcut = 'T'
+		Shortcut = 'F'
 	}
 	ActionMenu_465 {
 		Action = 'ninigi_corsair_Build_Ninigi'
@@ -2919,7 +2921,7 @@ Root {
 	}
 	ActionMenu_472 {
 		Action = 'ninigi_pirate_boss_ship_Build_Ninigi'
-		Shortcut = 'P'
+		Shortcut = 'B'
 	}
 	ActionMenu_473 {
 		Action = 'ninigi_rocket_boat_Build_Ninigi'
@@ -2967,7 +2969,7 @@ Root {
 	}
 	ActionMenu_484 {
 		Action = 'ninigi_zeppelin_Build_Ninigi'
-		Shortcut = 'Z'
+		Shortcut = 'L'
 	}
 	ActionMenu_485 {
 		Action = 'barrage_Moves_Ninigi'
@@ -3099,15 +3101,15 @@ Root {
 	}
 	ActionMenu_517 {
 		Action = 'ninigi_vehicle_def_up_1_Upgrades_Ninigi'
-		Shortcut = 'E'
+		Shortcut = 'Q'
 	}
 	ActionMenu_518 {
 		Action = 'ninigi_vehicle_def_up_2_Upgrades_Ninigi'
-		Shortcut = 'E'
+		Shortcut = 'Q'
 	}
 	ActionMenu_519 {
 		Action = 'ninigi_vehicle_def_up_3_Upgrades_Ninigi'
-		Shortcut = 'E'
+		Shortcut = 'Q'
 	}
 	ActionMenu_520 {
 		Action = 'machine_regeneration_Upgrades_Ninigi'
@@ -3211,7 +3213,7 @@ Root {
 	}
 	ActionMenu_545 {
 		Action = 'tower_sordes_upgrade_Upgrades_Ninigi'
-		Shortcut = 'S'
+		Shortcut = 'T'
 	}
 	ActionMenu_546 {
 		Action = 'ninigi_pannier_stone_1_Upgrades_Ninigi'
@@ -3283,11 +3285,11 @@ Root {
 	}
 	ActionMenu_563 {
 		Action = 'ninigi_archer_range_upgrade_1_Upgrades_Ninigi'
-		Shortcut = 'E'
+		Shortcut = 'K'
 	}
 	ActionMenu_564 {
 		Action = 'ninigi_archer_range_upgrade_2_Upgrades_Ninigi'
-		Shortcut = 'E'
+		Shortcut = 'K'
 	}
 	ActionMenu_565 {
 		Action = 'ninigi_gattling_damage_Upgrades_Ninigi'
@@ -3319,7 +3321,7 @@ Root {
 	}
 	ActionMenu_572 {
 		Action = 'ninigi_warrior_wpn_up_1_Upgrades_Ninigi'
-		Shortcut = 'P'
+		Shortcut = 'W'
 	}
 	ActionMenu_573 {
 		Action = 'ninigi_worker_vs_building_Upgrades_Ninigi'
@@ -3423,7 +3425,7 @@ Root {
 	}
 	ActionMenu_598 {
 		Action = 'seas_launchpad_zeppelin_Build_SEAS'
-		Shortcut = 'Z'
+		Shortcut = 'A'
 	}
 	ActionMenu_599 {
 		Action = 'seas_mg_nest_Build_SEAS'
@@ -3459,7 +3461,7 @@ Root {
 	}
 	ActionMenu_607 {
 		Action = 'seas_staircase_Build_SEAS'
-		Shortcut = 'C'
+		Shortcut = 'M'
 	}
 	ActionMenu_608 {
 		Action = 'seas_steelwork_Build_SEAS'
@@ -3487,7 +3489,7 @@ Root {
 	}
 	ActionMenu_614 {
 		Action = 'babbage_s0_Build_SEAS'
-		Shortcut = 'E'
+		Shortcut = 'U'
 	}
 	ActionMenu_615 {
 		Action = 'Bela_s0_Build_SEAS'
@@ -3623,7 +3625,7 @@ Root {
 	}
 	ActionMenu_648 {
 		Action = 'seas_submarine_Build_SEAS'
-		Shortcut = 'S'
+		Shortcut = 'I'
 	}
 	ActionMenu_649 {
 		Action = 'seas_helicopter_Build_SEAS'
@@ -3663,7 +3665,7 @@ Root {
 	}
 	ActionMenu_658 {
 		Action = 'seas_mobile_terminator_Build_SEAS'
-		Shortcut = 'P'
+		Shortcut = 'G'
 	}
 	ActionMenu_659 {
 		Action = 'seas_wehrspinne_Build_SEAS'
@@ -3671,7 +3673,7 @@ Root {
 	}
 	ActionMenu_660 {
 		Action = 'seas_zeppelin_Build_SEAS'
-		Shortcut = 'Z'
+		Shortcut = 'L'
 	}
 	ActionMenu_661 {
 		Action = 'cyborg_roar_Moves_SEAS'
@@ -3707,7 +3709,7 @@ Root {
 	}
 	ActionMenu_669 {
 		Action = 'contamination_Moves_SEAS'
-		Shortcut = 'H'
+		Shortcut = 'I'
 	}
 	ActionMenu_670 {
 		Action = 'deafening_Moves_SEAS'
@@ -3843,7 +3845,7 @@ Root {
 	}
 	ActionMenu_703 {
 		Action = 'seas_cloak_Upgrades_SEAS'
-		Shortcut = 'L'
+		Shortcut = 'O'
 	}
 	ActionMenu_704 {
 		Action = 'improved_ship_weapons_Upgrades_SEAS'
@@ -3851,19 +3853,19 @@ Root {
 	}
 	ActionMenu_705 {
 		Action = 'seas_more_fishing_1_Upgrades_SEAS'
-		Shortcut = 'F'
+		Shortcut = 'A'
 	}
 	ActionMenu_706 {
 		Action = 'seas_more_fishing_2_Upgrades_SEAS'
-		Shortcut = 'F'
+		Shortcut = 'A'
 	}
 	ActionMenu_707 {
 		Action = 'seas_more_fishing_3_Upgrades_SEAS'
-		Shortcut = 'F'
+		Shortcut = 'A'
 	}
 	ActionMenu_708 {
 		Action = 'seas_more_fishing_4_Upgrades_SEAS'
-		Shortcut = 'F'
+		Shortcut = 'A'
 	}
 	ActionMenu_709 {
 		Action = 'robot_plating_Upgrades_SEAS'
@@ -3871,7 +3873,7 @@ Root {
 	}
 	ActionMenu_710 {
 		Action = 'seas_contamination_Upgrades_SEAS'
-		Shortcut = 'H'
+		Shortcut = 'I'
 	}
 	ActionMenu_711 {
 		Action = 'seas_deafening_Upgrades_SEAS'
@@ -3883,7 +3885,7 @@ Root {
 	}
 	ActionMenu_713 {
 		Action = 'contamination_Upgrades_SEAS'
-		Shortcut = 'K'
+		Shortcut = 'I'
 	}
 	ActionMenu_714 {
 		Action = 'parasite_Upgrades_SEAS'
@@ -3995,7 +3997,7 @@ Root {
 	}
 	ActionMenu_741 {
 		Action = 'triceratops_tusk_Upgrades_SEAS'
-		Shortcut = 'Z'
+		Shortcut = 'S'
 	}
 	ActionMenu_742 {
 		Action = 'seas_food_building_Upgrades_SEAS'
@@ -4356,6 +4358,38 @@ Root {
 	ActionMenu_831 {
 		Action = 'crash_enchain_Moves_World'
 		Shortcut = 'A'
+	}
+	ActionMenu_832 {
+		Action = 'headquarters_reactor_core_Upgrades_SEAS'
+		Shortcut = 'С'
+	}
+	ActionMenu_833 {
+		Action = 'jail_part_01_reactor_core_Upgrades_SEAS'
+		Shortcut = 'Y'
+	}
+	ActionMenu_834 {
+		Action = 'jail_part_02_reactor_core_Upgrades_SEAS'
+		Shortcut = 'A'
+	}
+	ActionMenu_835 {
+		Action = 'better_bld_tools_Upgrades_Aje'
+		Shortcut = 'I'
+	}
+	ActionMenu_836 {
+		Action = 'planetary_upgrade_Upgrades_SEAS'
+		Shortcut = 'F'
+	}
+	ActionMenu_837 {
+		Action = 'hu_zombie_archer_2_Build_Hu'
+		Shortcut = 'C'
+	}
+	ActionMenu_838 {
+		Action = 'hu_mud_pit_Build_Hu'
+		Shortcut = 'Y'
+	}
+	ActionMenu_839 {
+		Action = 'aje_sensor_tower_Build_Aje'
+		Shortcut = 'Q'
 	}
 	Flyout_0 {
 		Action = 'build'
