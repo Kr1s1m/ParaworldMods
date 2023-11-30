@@ -8629,11 +8629,14 @@ class CBunker inherit CTower
 	
 endclass;
 
-class CArtefactStorageBuilding inherit CBunker //CBuilding
+class CItemStorage inherit CBuilding
+
+	var CObjList 	m_xItems;
+	var bool 		m_bAboutToDie;
 
 endclass;
 
-class CHeroPrison inherit CRallyBuilding
+class CCharPrison inherit CRallyBuilding
 
 endclass;
 
