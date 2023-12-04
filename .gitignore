@@ -1,5 +1,8 @@
 Base/
 BoosterPack1/
+Paragames/
+UIfor2K/
+UIfor4K/
 Info/BaseLocale.info
 Info/BoosterPack1.info
 Info/LevelEd.info
@@ -14,9 +17,12 @@ Info/Locale_RU.info
 Info/Locale_US.info
 Info/Locale_ZH.info
 Info/MIRAGE.info
+Info/Paragames.info
 Info/ReColor.info
 Info/Locale_DE.info
 Info/UIRescaleX2.info
+Info/UIfor2K.info
+Info/UIfor4K.info
 Info/Wintermod.info
 Locale/
 MIRAGE/
