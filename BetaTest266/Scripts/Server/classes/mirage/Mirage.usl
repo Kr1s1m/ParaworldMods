@@ -11219,6 +11219,17 @@ class CSeasStaircase inherit CBuilding
 	
 endclass;
 
+class CItemStorage inherit CBuilding
+
+	var CObjList 	m_xItems;
+	var bool 		m_bAboutToDie;
+
+endclass;
+
+class CCharPrison inherit CRallyBuilding
+
+endclass;
+	
 class CSeasStygiNest inherit CBuilding
 	
 	var CObjHndl m_xNest;
