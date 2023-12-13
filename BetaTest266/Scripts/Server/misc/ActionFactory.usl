@@ -1598,12 +1598,12 @@ class CActionObjDo inherit CTrigger.IAction
 			if(!p_bEnable)then
 				if(pxAttr!=null)then
 					pxFO^.SetLDInvulnerable(false);
-					//pxFO^.SetInvulnerable(-1);
+					//pxFO^.SetInvulnerable(0);
 				endif;
 			elseif(p_bEnable && p_fSecs == 0.00)then
 				if(pxAttr!=null)then
 					pxFO^.SetLDInvulnerable(true);
-					//pxFO^.SetInvulnerable(0);
+					//pxFO^.SetInvulnerable(1);
 				endif;
 			endif;
 			if(p_bEnable && p_fSecs > 0.00)then
