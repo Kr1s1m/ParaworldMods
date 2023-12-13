@@ -5777,6 +5777,8 @@ class CFightingObj inherit CGameObj
 			SetEffectFlag(EFFECT_AJE_CAMOUFLAGE, false);
 		endif;
 		if(p_pxEnemy==null)then return 0.0; endif;
+		//Kr1s1m: invulnerable units should not take damage:
+		if(p_pxEnemy^.GetInvulnerable() > 0 || p_pxEnemy^.GetLDInvulnerable())then return 0.0; endif;
 		if(GetOnWall())then return 0.0; endif;
 		//Henry: flying unit won't suffer damage by units which can't fight air (TODO: make a bigger and better list of those units...)
 		if((m_bFlyingUnit&&!p_pxEnemy^.CanShootAir())||GetTransportObj().IsValid())then
@@ -14078,6 +14080,8 @@ class CFightingObj inherit CGameObj
 	export proc void PoisonDamage(real p_fDamage, CObjHndl p_xEnemy, int p_iEnemy)
 		if(m_bGodMode)then return;endif;
 		if(m_bSlaveInvincible)then return;endif;
+		//Kr1s1m: units which have invulnerable flag set by ACDO trigger used to be damaged by poison ticks
+		if(m_iInvulnerable > 0 || m_bLDInvulnerable)then return; endif;
 		if(m_bLevelUpInvulnerable)then return; endif;
 		if(m_bStolen||IsFeignDeath())then return; endif;
 		if(m_bFountainHealed||m_bResurrectSafety)then return; endif;
@@ -14099,6 +14103,8 @@ class CFightingObj inherit CGameObj
 	export proc void BurnDamage(real p_fDamage, CObjHndl p_xEnemy, int p_iEnemy)
 		if(m_bGodMode)then return;endif;
 		if(m_bSlaveInvincible)then return;endif;
+		//Kr1s1m: buildings which have invulnerable flag set by ACDO trigger used to be damaged by fire ticks
+		if(m_iInvulnerable > 0 || m_bLDInvulnerable)then return; endif;
 		if(m_bLevelUpInvulnerable)then return; endif;
 		m_xLastEnemy=p_xEnemy;
 		m_iLastDamage=p_iEnemy;
