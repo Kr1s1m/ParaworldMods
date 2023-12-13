@@ -10093,6 +10093,10 @@ class CSeasGreatCannon inherit CTower
 		return true;
 	endproc;
 	
+	export proc void ReactToGamePlayCommand(string p_sCommand, ^CGameObj p_pxObject, vec3 p_vPos, string p_sMiscParams, bool p_bQ, bool p_bS, bool p_bA)
+		super.ReactToGamePlayCommand(p_sCommand,p_pxObject,p_vPos,p_sMiscParams,p_bQ,p_bS,p_bA);
+	endproc;
+	
 	export proc void Delete()
 		if(m_xBirdie.IsValid())then m_xBirdie.GetObj()^.Delete(); endif;
 		super.Delete();
