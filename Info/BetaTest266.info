@@ -6,3 +6,4 @@ info BetaTest266
 version 1.4
 priority 15
 tryfilereplace */data/base/* data/base/ data/BetaTest266/
+tryfilereplace */data/leveled/* data/leveled/ data/BetaTest266/leveled/

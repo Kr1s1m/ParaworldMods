@@ -1265,6 +1265,8 @@ class CActionObjDo inherit CTrigger.IAction
 			DoKill(p_pxObj);
 		elseif(m_sAction == "AbortTask")then
 			DoAbortTask(p_pxObj);
+		elseif(m_sAction == "WeaponRemove")then //Kr1s1m: If the action is the newly added weapon removal, then:
+			DoWeaponRemove(p_pxObj);
 		elseif(m_sAction == "Invulnerability")then
 			var array string asToks;
 			m_sAdditionalParams.Split(asToks, ":", true);
@@ -1548,6 +1550,46 @@ class CActionObjDo inherit CTrigger.IAction
 		endif;
 	endproc;
 	
+	//Kr1s1m: added function for WeaponRemove ActionObjDo trigger
+	proc void DoWeaponRemove(^CGameObj p_pxObj)
+		KLog.LogSpam("Kr1s1m", "CActionObjDo::DoWeaponRemove begin");
+		//Kr1s1m: Cast the generic object into fighting context:
+		var ^CFightingObj pxFO = cast<CFightingObj>(p_pxObj);
+		//Kr1s1m: Use the weapon manager of the fighting object to access and remove all weapons:
+		var ^CWeaponMgr pxMgr = pxFO^.GetWeaponMgr();
+		
+		//var int iW = pxMgr^.NumWeapons();
+		//if(iW > 0)then
+			//var int i;
+			//for(i=0)cond(i<iW)iter(i++)do
+				//pxMgr^.RemWeapon(pxMgr^.GetWeaponPath(i));
+			//endfor;
+		//endif;
+		//pxMgr^.UpdateAll();
+		
+		pxMgr^.ClearAllWeapons();
+		
+		//KLog.LogSpam("Kr1s1m", pxFO^.GetDmg().ToString());
+		//pxMgr^.UpdateAll();
+		//KLog.LogSpam("Kr1s1m", pxFO^.GetDmg().ToString());
+			
+		//pxFO^.UpdateEquipment();
+		//pxFO^.UpdateFightFactors();
+		pxFO^.ClearDamageCache();
+		
+		//pxFO^.SetDmg(0.0);
+		
+		KLog.LogSpam("Kr1s1m", pxFO^.GetDmg().ToString());
+		
+		var int i, iW = pxMgr^.NumWeapons();
+		for(i=0)cond(i<iW)iter(i++)do
+			KLog.LogSpam("Kr1s1m", (pxMgr^.GetWeapon(i)^.GetDamage()).ToString());
+		endfor;
+			
+		KLog.LogSpam("Kr1s1m", "CActionObjDo::DoWeaponRemove end");
+		
+	endproc;
+	
 	proc void DoInvulnerability(^CGameObj p_pxObj, bool p_bEnable, real p_fSecs)
 		var ^CFightingObj pxFO = cast<CFightingObj>(p_pxObj);
 		if(pxFO==null)then return; endif;
@@ -1556,10 +1598,12 @@ class CActionObjDo inherit CTrigger.IAction
 			if(!p_bEnable)then
 				if(pxAttr!=null)then
 					pxFO^.SetLDInvulnerable(false);
+					pxFO^.SetInvulnerable(-1);
 				endif;
 			elseif(p_bEnable && p_fSecs == 0.00)then
 				if(pxAttr!=null)then
 					pxFO^.SetLDInvulnerable(true);
+					pxFO^.SetInvulnerable(0);
 				endif;
 			endif;
 			if(p_bEnable && p_fSecs > 0.00)then
