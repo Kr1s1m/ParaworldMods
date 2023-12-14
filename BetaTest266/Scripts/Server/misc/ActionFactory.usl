@@ -1266,7 +1266,23 @@ class CActionObjDo inherit CTrigger.IAction
 		elseif(m_sAction == "AbortTask")then
 			DoAbortTask(p_pxObj);
 		elseif(m_sAction == "WeaponRemove")then //Kr1s1m: If the action is the newly added weapon removal, then:
-			DoWeaponRemove(p_pxObj);
+			var array string asTokensz;
+			m_sAdditionalParams.Split(asTokensz, ":", true);
+			var bool bEnabled = false;
+			m_fSecs = 0.0f;
+			if(asTokensz[0] == "Enable")then
+				bEnabled = true;
+			elseif(asTokensz[0] == "Timer")then
+				bEnabled = true;
+				if(asTokensz.NumEntries() >= 2)then
+					m_fSecs = asTokensz[1].ToReal();
+					KLog.LogSpam("Kr1s1m", "Timer seconds param set to:");
+					KLog.LogSpam("Kr1s1m", m_fSecs.ToString());
+				else
+					KLog.LogSpam("Kr1s1m", "Wrong parameters for WeaponRemove ACDO trigger");
+				endif;
+			endif;
+			DoWeaponRemove(p_pxObj, bEnabled, m_fSecs);
 		elseif(m_sAction == "Invulnerability")then
 			var array string asToks;
 			m_sAdditionalParams.Split(asToks, ":", true);
@@ -1551,40 +1567,34 @@ class CActionObjDo inherit CTrigger.IAction
 	endproc;
 	
 	//Kr1s1m: added function for WeaponRemove ActionObjDo trigger
-	proc void DoWeaponRemove(^CGameObj p_pxObj)
+	proc void DoWeaponRemove(^CGameObj p_pxObj, bool p_bEnable, real p_fSecs)
 		KLog.LogSpam("Kr1s1m", "CActionObjDo::DoWeaponRemove begin");
-		//Kr1s1m: Cast the generic object into fighting context:
+	
+		if(p_pxObj==null)then return; endif;
+		//Kr1s1m: Cast the generic non-null object into fighting context:
 		var ^CFightingObj pxFO = cast<CFightingObj>(p_pxObj);
-		//Kr1s1m: Use the weapon manager of the fighting object to access and remove all weapons:
-		var ^CWeaponMgr pxMgr = pxFO^.GetWeaponMgr();
-		
-		//var int iW = pxMgr^.NumWeapons();
-		//if(iW > 0)then
-			//var int i;
-			//for(i=0)cond(i<iW)iter(i++)do
-				//pxMgr^.RemWeapon(pxMgr^.GetWeaponPath(i));
-			//endfor;
-		//endif;
-		//pxMgr^.UpdateAll();
-		
-		pxMgr^.ClearAllWeapons();
-		
-		//KLog.LogSpam("Kr1s1m", pxFO^.GetDmg().ToString());
-		//pxMgr^.UpdateAll();
-		//KLog.LogSpam("Kr1s1m", pxFO^.GetDmg().ToString());
-			
-		//pxFO^.UpdateEquipment();
-		//pxFO^.UpdateFightFactors();
-		pxFO^.ClearDamageCache();
-		
-		//pxFO^.SetDmg(0.0);
+		var ^CAttribs pxAttr = pxFO^.GetAttribs();
 		
 		KLog.LogSpam("Kr1s1m", pxFO^.GetDmg().ToString());
 		
-		var int i, iW = pxMgr^.NumWeapons();
-		for(i=0)cond(i<iW)iter(i++)do
-			KLog.LogSpam("Kr1s1m", (pxMgr^.GetWeapon(i)^.GetDamage()).ToString());
-		endfor;
+		if(pxFO!=null && pxAttr!=null)then
+			if(!p_bEnable)then
+				pxFO^.RemoveAllWeapons(false);
+				KLog.LogSpam("Kr1s1m", "CActionObjDo::DoWeaponRemove RemoveAllWeapons direct false");
+			else
+				if(p_fSecs == 0.00)then
+					pxFO^.RemoveAllWeapons(true);
+					KLog.LogSpam("Kr1s1m", "CActionObjDo::DoWeaponRemove RemoveAllWeapons direct true");
+				endif;
+				if(p_fSecs > 0.00)then
+					pxFO^.TriggerTimer("WeaponRemove", p_fSecs);
+					KLog.LogSpam("Kr1s1m", "CActionObjDo::DoWeaponRemove TriggerTimer called");
+				endif;
+			endif;
+		endif;
+		
+		KLog.LogSpam("Kr1s1m", "Damage changed to:");
+		KLog.LogSpam("Kr1s1m", pxFO^.GetDmg().ToString());
 			
 		KLog.LogSpam("Kr1s1m", "CActionObjDo::DoWeaponRemove end");
 		
@@ -1607,7 +1617,7 @@ class CActionObjDo inherit CTrigger.IAction
 				endif;
 			endif;
 			if(p_bEnable && p_fSecs > 0.00)then
-				pxFO^.TriggerTimer(p_fSecs);
+				pxFO^.TriggerTimer("Invulnerability", p_fSecs);
 			endif;
 		endif;
 	endproc;
