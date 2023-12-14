@@ -5786,7 +5786,7 @@ class CFightingObj inherit CGameObj
 		endif;
 		if(p_pxEnemy==null)then return 0.0; endif;
 		//Kr1s1m: invulnerable units should not take damage:
-		if(p_pxEnemy^.GetInvulnerable() > 0 || p_pxEnemy^.GetLDInvulnerable())then return 0.0; endif;
+		//if(p_pxEnemy^.GetInvulnerable() > 0 || p_pxEnemy^.GetLDInvulnerable())then return 0.0; endif;
 		if(GetOnWall())then return 0.0; endif;
 		//Henry: flying unit won't suffer damage by units which can't fight air (TODO: make a bigger and better list of those units...)
 		if((m_bFlyingUnit&&!p_pxEnemy^.CanShootAir())||GetTransportObj().IsValid())then
