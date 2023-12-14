@@ -982,7 +982,7 @@ class CFightingObj inherit CGameObj
 	const int			TIMER_MAMMOTH_TRUMPET		=460;
 	const int			TIMER_TRICERATOPS_PAW		=461;
 	const int			TIMER_INVUL					=10;
-	const int			TIMER_WEAPON_REMOVE			=15;
+	const int			TIMER_WEAPON_REMOVE			=15; //Kr1s1m: Added unique timer id for WeaponRemove ACDO
 	const int			TIMER_STONED				=23;
 	const int			TIMER_FROST					=24;
 	const int			TIMER_FROSTIMMUNITY			=25;
@@ -3489,10 +3489,7 @@ class CFightingObj inherit CGameObj
 				SetLDInvulnerable(false);
 			elseif(iTimerID==TIMER_WEAPON_REMOVE )then
 				DeleteTimer(TIMER_WEAPON_REMOVE);
-				KLog.LogSpam("Kr1s1m", "TIMER_WEAPON_REMOVE has ended.");
-				RemoveAllWeapons(false);
-				KLog.LogSpam("Kr1s1m", "Damage restored (via timer):");
-				KLog.LogSpam("Kr1s1m", GetDmg().ToString());
+				RemoveAllWeapons(false); //Kr1s1m: After the timer has finished, the WeaponRemove effect is reversed
 			elseif(iTimerID==TIMER_STONED)then
 				DeleteTimer(TIMER_STONED);
 				SetEffectFlag(EFFECT_ITEM_STONED, false);
@@ -6404,19 +6401,14 @@ class CFightingObj inherit CGameObj
 	// TriggerTimer
 	//////
 	export proc void TriggerTimer(string p_sAction, real p_fSecs)
-	KLog.LogSpam("Kr1s1m", "CFightingObj::TriggerTimer begin");
+		//Kr1s1m: Added a switch by p_sAction and WeaponRemove case to it
 		if(p_sAction == "WeaponRemove")then
-			KLog.LogSpam("Kr1s1m", "CFightingObj::TriggerTimer case WeaponRemove begin");
 			CreateTimer(TIMER_WEAPON_REMOVE, CGameTimeSpan.OneSecond() * p_fSecs, false);
 			RemoveAllWeapons(true);
-			KLog.LogSpam("Kr1s1m", "CFightingObj::TriggerTimer case WeaponRemove end");
 		elseif(p_sAction == "Invulnerability")then
-			KLog.LogSpam("Kr1s1m", "CFightingObj::TriggerTimer case Invulnerability begin");
 			CreateTimer(TIMER_INVUL, CGameTimeSpan.OneSecond() * p_fSecs, false);
 			SetLDInvulnerable(true);
-			KLog.LogSpam("Kr1s1m", "CFightingObj::TriggerTimer case Invulnerability end");
 		endif;
-	KLog.LogSpam("Kr1s1m", "CFightingObj::TriggerTimer end");
 	endproc;
 	
 	///////
@@ -12217,81 +12209,68 @@ class CFightingObj inherit CGameObj
 		return m_bBloodInfect;
 	endproc;
 	
+	//Kr1s1m: We wanted to have the functionality to disarm a fighting object, for example a tower, or unit, through a trigger
 	export proc void RemoveAllWeapons(bool p_bEnable)
-		if(p_bEnable == m_bWeaponRemoved)then KLog.LogSpam("Kr1s1m", "CFightingObj::RemoveAllWeapons command already in effect"); return; endif;
-		if(!p_bEnable)then
-			KLog.LogSpam("Kr1s1m", "CFightingObj::RemoveAllWeapons false begin");
-			//RestoreWeaponMgr();
-			ForceGeneralUpdate();
-			KLog.LogSpam("Kr1s1m", "CFightingObj::RemoveAllWeapons false end");
-		else
-			KLog.LogSpam("Kr1s1m", "CFightingObj::RemoveAllWeapons true begin");
+		//Kr1s1m: operation is reversible, trying to enable or disable twice in a row does nothing (on-off switch)
+		if(p_bEnable == m_bWeaponRemoved)then return; endif;
+		if(!p_bEnable)then //Kr1s1m: If we want to reverse the disarm effect...
+			ForceGeneralUpdate(); //Kr1s1m: ...we restore all weapon data from TT and reload the caches and the weapon manager
+	        //UpdateFightFactors();
+		else //Kr1s1m: In case that we want to apply the disarm effect:
+			//Kr1s1m: First we stop the attack animations
 			ClearFightAnims();
-			SetProjectile("");
-			SetProjectileGfx("");
-			SetDmg(0.0f);
-			SetMinDmg(0.0f);
-			SetEndDmg(0.0f);
-			SetProtection(0.0f);
-			SetRangedProtection(0.0f);
-			SetHitRange(0.0f);
-			SetRealHitRange(0.0f);
-			SetAttackRange(0.0f);
-			SetWeaponDuration(0.0f);
-			SetPenetrationAngle(0.0f);
-			SetPenetrationFactor(0.0f);
-			SetMinAttackRange(0.0f);
-			SetRealMinAttackRange(0.0f);
-			SetArmorPiercing(0.0f);
-			SetPoisonDmg(0.0f);
-			SetFireDmg(0.0f);
-			SetPenetration(false);
-			SetCanFightAir(false);
-			SetPoisonMaxTickCount(0);
-			SetBurnTime(0);
-			SetWeaponSizeClass(0);
-			m_pxWeaponMgr^.ClearAllWeapons();
-			ClearWeaponCache();
-			ClearDamageCache();
-			delete m_pxWeaponMgr;
-			m_pxWeaponMgr = new CWeaponMgr(this);
-			KLog.LogSpam("Kr1s1m", "CFightingObj::RemoveAllWeapons true end");
+			//Kr1s1m: Second, we set all weapon related fields to their null value
+			begin ClearWeapons;
+				SetProjectile("");
+				SetProjectileGfx("");
+				SetDmg(0.0f);
+				SetMinDmg(0.0f);
+				SetEndDmg(0.0f);
+				SetProtection(0.0f);
+				SetRangedProtection(0.0f);
+				SetHitRange(0.0f);
+				SetRealHitRange(0.0f);
+				SetAttackRange(0.0f);
+				SetWeaponDuration(0.0f);
+				SetPenetrationAngle(0.0f);
+				SetPenetrationFactor(0.0f);
+				SetMinAttackRange(0.0f);
+				SetRealMinAttackRange(0.0f);
+				SetArmorPiercing(0.0f);
+				SetPoisonDmg(0.0f);
+				SetFireDmg(0.0f);
+				SetPenetration(false);
+				SetCanFightAir(false);
+				SetPoisonMaxTickCount(0);
+				SetBurnTime(0);
+				SetWeaponSizeClass(0);
+				m_pxWeaponMgr^.ClearAllWeapons();
+				ClearWeaponCache();
+				ClearDamageCache();
+			end ClearWeapons;
+			//Kr1s1m: Third, we erase the cleared weapon manager from the heap memory, and re-allocate it
+			begin RestoreWeaponMgr;
+				delete m_pxWeaponMgr;
+				m_pxWeaponMgr = new CWeaponMgr(this);
+			end RestoreWeaponMgr;
 		endif;
+		//Kr1s1m: Last, we raise up the necessary flags
 		m_bWeaponHasChanged = true;
 		m_bOwnWeaponHasChanged = true;
 		m_bWeaponRemoved = p_bEnable;
 	endproc;
 	
-	//export proc void RestoreWeaponMgr()
-		//KLog.LogSpam("Kr1s1m", "CFightingObj::RestoreWeaponMgr begin");
-		//if(m_pxWeaponMgr!=null)then
-			//KLog.LogSpam("Kr1s1m", "CFightingObj::RestoreWeaponMgr not null begin");
-			//delete m_pxWeaponMgr;
-			//KLog.LogSpam("Kr1s1m", "CFightingObj::RestoreWeaponMgr not null end");
-		//endif;
-		//m_pxWeaponMgr=new CWeaponMgr(this);
-		//KLog.LogSpam("Kr1s1m", "CFightingObj::RestoreWeaponMgr end");
-	//endproc;
-	
 	export proc void ForceGeneralUpdate()
-		KLog.LogSpam("Kr1s1m", "CFightingObj::ForceGeneralUpdate begin");
 		m_pxWeaponMgr^.UpdateAll();
-		KLog.LogSpam("Kr1s1m", "CFightingObj::ForceGeneralUpdate m_pxWeaponMgr updated");
 		UpdateEquipment();
-		KLog.LogSpam("Kr1s1m", "CFightingObj::ForceGeneralUpdate equipment updated");
 		UpdateWeaponBoni();
-		KLog.LogSpam("Kr1s1m", "CFightingObj::ForceGeneralUpdate boni updated");
 		ForceBoniUpdate();
-		KLog.LogSpam("Kr1s1m", "CFightingObj::ForceGeneralUpdate boni force updated");
 		UpdateRangeNDamageInformation();
-		KLog.LogSpam("Kr1s1m", "CFightingObj::ForceGeneralUpdate range n damage information updated");
 		AddTemporaryAttackBoni(GetDmg());
 		AddTemporaryMeleeAttackBoni(GetDmg());
 		AddTemporaryRangedAttackBoni(GetDmg());
 		AddTemporaryDefenseBoni(GetProtection());
 		AddTemporaryRangedDefenseBoni(GetRangedProtection());
-		KLog.LogSpam("Kr1s1m", "CFightingObj::ForceGeneralUpdate temporaries added");
-		KLog.LogSpam("Kr1s1m", "CFightingObj::ForceGeneralUpdate end");
 	endproc;
 	
 	export proc real CalcMeleeAttackBoni(real p_fDamage)
