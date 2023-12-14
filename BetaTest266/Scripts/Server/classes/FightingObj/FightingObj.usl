@@ -1211,6 +1211,7 @@ class CFightingObj inherit CGameObj
 	var bool				m_bBLDGResBack;
 	var bool				m_bSHIPResBack;
 	var bool				m_bWeaponHasChanged;
+	var bool				m_bWeaponRemoved;
 	var bool				m_bOwnWeaponHasChanged;
 	var bool				m_bHelpShoutDefend;
 	var CObjHndl			m_xHelpShoutEnemy;
@@ -1497,6 +1498,7 @@ class CFightingObj inherit CGameObj
 		pxArc^ << m_bBLDGResBack;
 		pxArc^ << m_bSHIPResBack;
 		pxArc^ << m_bWeaponHasChanged;
+		//pxArc^ << m_bWeaponRemoved;
 		pxArc^ << m_bOwnWeaponHasChanged;
 		m_xLastHelpShout.DoKArc(pxArc^);
 		pxArc^ << m_bIsHelpShout;
@@ -1871,6 +1873,7 @@ class CFightingObj inherit CGameObj
 				pxArc^ << m_bIceImmunity;
 				pxArc^ << m_bPoisonImmunity;
 				pxArc^ << m_bIncapacitated;
+				//pxArc^ << m_bWeaponRemoved;
 				pxArc^ << m_iSupplyCount;
 				pxArc^ << m_fTmpMeAttackBoni;
 				pxArc^ << m_fTmpRaAttackBoni;
@@ -2955,6 +2958,7 @@ class CFightingObj inherit CGameObj
 		m_bNoHitReaction=false;
 		m_bTitanDefense=false;
 		m_bBrokenLegs=false;
+		m_bWeaponRemoved=false;//Kr1s1m: initialized newly added boolean for weapon removal - by default unit is not disarmed
 		m_bLocked=false;
 		m_bThrowImmune=false;
 		m_bDarkSwarm=false;
@@ -9524,6 +9528,10 @@ class CFightingObj inherit CGameObj
 		m_bOwnWeaponHasChanged=true;
 	endproc;
 	
+	export proc bool Disarmed()
+		return m_bWeaponRemoved;
+	endproc;
+	
 	export proc bool WeaponHasChanged()
 		if(m_bWeaponHasChanged)then
 			m_bWeaponHasChanged=false;
@@ -12210,6 +12218,7 @@ class CFightingObj inherit CGameObj
 	endproc;
 	
 	export proc void RemoveAllWeapons(bool p_bEnable)
+		if(p_bEnable == m_bWeaponRemoved)then KLog.LogSpam("Kr1s1m", "CFightingObj::RemoveAllWeapons command already in effect"); return; endif;
 		if(!p_bEnable)then
 			KLog.LogSpam("Kr1s1m", "CFightingObj::RemoveAllWeapons false begin");
 			//RestoreWeaponMgr();
@@ -12237,7 +12246,6 @@ class CFightingObj inherit CGameObj
 			SetPoisonDmg(0.0f);
 			SetFireDmg(0.0f);
 			SetPenetration(false);
-			var bool bProjectile=false;
 			SetCanFightAir(false);
 			SetPoisonMaxTickCount(0);
 			SetBurnTime(0);
@@ -12246,9 +12254,12 @@ class CFightingObj inherit CGameObj
 			ClearWeaponCache();
 			ClearDamageCache();
 			delete m_pxWeaponMgr;
-			m_pxWeaponMgr=new CWeaponMgr(this);
+			m_pxWeaponMgr = new CWeaponMgr(this);
 			KLog.LogSpam("Kr1s1m", "CFightingObj::RemoveAllWeapons true end");
 		endif;
+		m_bWeaponHasChanged = true;
+		m_bOwnWeaponHasChanged = true;
+		m_bWeaponRemoved = p_bEnable;
 	endproc;
 	
 	//export proc void RestoreWeaponMgr()

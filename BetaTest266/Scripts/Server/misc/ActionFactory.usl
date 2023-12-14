@@ -1568,13 +1568,14 @@ class CActionObjDo inherit CTrigger.IAction
 	
 	//Kr1s1m: added function for WeaponRemove ActionObjDo trigger
 	proc void DoWeaponRemove(^CGameObj p_pxObj, bool p_bEnable, real p_fSecs)
-		KLog.LogSpam("Kr1s1m", "CActionObjDo::DoWeaponRemove begin");
+		KLog.LogSpam("Kr1s1m", "==========>CActionObjDo::DoWeaponRemove begin");
 	
 		if(p_pxObj==null)then return; endif;
 		//Kr1s1m: Cast the generic non-null object into fighting context:
 		var ^CFightingObj pxFO = cast<CFightingObj>(p_pxObj);
 		var ^CAttribs pxAttr = pxFO^.GetAttribs();
 		
+		KLog.LogSpam("Kr1s1m", "Damage before operation is executed:");
 		KLog.LogSpam("Kr1s1m", pxFO^.GetDmg().ToString());
 		
 		if(pxFO!=null && pxAttr!=null)then
@@ -1596,7 +1597,7 @@ class CActionObjDo inherit CTrigger.IAction
 		KLog.LogSpam("Kr1s1m", "Damage changed to:");
 		KLog.LogSpam("Kr1s1m", pxFO^.GetDmg().ToString());
 			
-		KLog.LogSpam("Kr1s1m", "CActionObjDo::DoWeaponRemove end");
+		KLog.LogSpam("Kr1s1m", "CActionObjDo::DoWeaponRemove end<--------");
 		
 	endproc;
 	
