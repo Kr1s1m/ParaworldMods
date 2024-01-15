@@ -1,10 +1,12 @@
 Base/
 BoosterPack1/
+BoosterPack3/
 Paragames/
 UIfor2K/
 UIfor4K/
 Info/BaseLocale.info
 Info/BoosterPack1.info
+Info/BoosterPack3.info
 Info/LevelEd.info
 Info/Locale_UK.info
 Info/Locale_DE.info
@@ -13,6 +15,7 @@ Info/Locale_FR.info
 Info/Locale_HU.info
 Info/Locale_IT.info
 Info/Locale_PL.info
+Info/Locale_CZ.info
 Info/Locale_RU.info
 Info/Locale_US.info
 Info/Locale_ZH.info
