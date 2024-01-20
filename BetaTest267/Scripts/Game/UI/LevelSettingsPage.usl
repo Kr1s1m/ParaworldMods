@@ -1,4 +1,4 @@
-//ParaworldFan multicamapign: file responsible for changing "Gametype" string in lobby window, also responsible for "Game Server" checkboxes
+//ParaworldFan multicampaign: file responsible for changing "Gametype" string in lobby window, also responsible for "Game Server" checkboxes
 class CHostListEntry inherit CWindow
 	
 	export constructor(int p_iNumPlayers,string p_sMapName)
@@ -178,7 +178,7 @@ class CLevelSettingsPage inherit CWindow
 		//LOCKDIPLOMACYSETTINGS
 		m_pxLockDiplomacy=cast<CCheckBox>(GetControl("LockDiplomacy"));
 		var int iLockDiplomacy=CClientWrap.GetUserProfileValueI("Multiplayer/LockDiplomacy",0);
-		if(iGameType==1)then
+		if(iGameType==1 || iGameType==2)then
 			m_pxLockDiplomacy^.SetChecked(1);
 			m_pxLockDiplomacy^.SetDisabled(true);
 		else
@@ -320,7 +320,6 @@ class CLevelSettingsPage inherit CWindow
 		for(i=0)cond(i<iC)iter(i++)do
 			var ^CItemDataString pxItemData=cast<CItemDataString>(m_pxHostMapList^.GetItemData(i));
 			if(pxItemData!=null)then
-//				UpdateCustomCheckboxes(GetLevelNameAt(i));
 				if(pxItemData^.m_sData==sSelectedMap)then
 					iSelIdx=i;
 				endif;
@@ -337,65 +336,17 @@ class CLevelSettingsPage inherit CWindow
 	export proc bool OnChangeGameType()
 		//KLog.LogSpam("Kr1s1m", "CLevelSettingsPage::OnChangeGameType() begin");
 		var int iGameType=m_pxGameType^.GetSelectedItem();
-		//var string sLevelName=GetLevelNameAt(m_pxHostMapList^.GetSelectedItem());
-		/*if(iGameType==0 && (sLevelName=="Single 01"||sLevelName=="Single 02"||
-		sLevelName=="Single 03"||sLevelName=="Single 04"||sLevelName=="Single 05"||
-		sLevelName=="Single 06"||sLevelName=="Single 07"||sLevelName=="Single 08"||
-		sLevelName=="Single 09"||sLevelName=="Single 10"||sLevelName=="Single 11"||
-		sLevelName=="Single 12"||sLevelName=="Single 13"||sLevelName=="Single 14"||
-		sLevelName=="Single 15"||sLevelName=="Single 16"||sLevelName=="Single B41"||
-		sLevelName=="Single B42"||sLevelName=="Single B43"))then	//"Game mode" == CUSTOM
-			if(CClientWrap.GetUserProfileValueI("Multiplayer/GameType",iGameType)!=iGameType)then;
-				m_pxDisableWarpgate^.SetChecked(1);
-				m_pxDisableFOW^.SetChecked(0);
-				m_pxLockDiplomacy^.SetChecked(0);
-				m_pxAllowHandicap^.SetChecked(0);
-				m_pxChooseHQ^.SetChecked(1);
-				m_pxChooseColor^.SetChecked(0);
-			endif;
-			m_pxDisableWarpgate^.SetDisabled(true);
-			m_pxDisableFOW^.SetDisabled(true);
-			m_pxLockDiplomacy^.SetDisabled(true);
-			m_pxAllowHandicap^.SetDisabled(true);
-			m_pxChooseHQ^.SetDisabled(true);
-			m_pxChooseColor^.SetDisabled(true);
-  else*/if(iGameType==0)then
-			if(CClientWrap.GetUserProfileValueI("Multiplayer/GameType",iGameType)!=iGameType)then;
-				m_pxDisableWarpgate^.SetChecked(0);
-				m_pxLockDiplomacy^.SetChecked(0);
-				m_pxChooseHQ^.SetChecked(0);
-			endif;
-			m_pxDisableWarpgate^.SetDisabled(false);
-			m_pxLockDiplomacy^.SetDisabled(false);
-			m_pxChooseHQ^.SetDisabled(false);
-		elseif(iGameType==1)then
-			if(CClientWrap.GetUserProfileValueI("Multiplayer/GameType",iGameType)!=iGameType)then;
-				m_pxDisableWarpgate^.SetChecked(1);
-				m_pxChooseHQ^.SetChecked(0);
-			endif;
-			m_pxLockDiplomacy^.SetChecked(1);
-			m_pxDisableWarpgate^.SetDisabled(false);
-			m_pxLockDiplomacy^.SetDisabled(true);
-			m_pxChooseHQ^.SetDisabled(false);
-		elseif(iGameType==2)then	//disabling checkboxes for defender
-			if(CClientWrap.GetUserProfileValueI("Multiplayer/GameType",iGameType)!=iGameType)then;
-				m_pxDisableWarpgate^.SetChecked(1);
-			endif;
-			m_pxLockDiplomacy^.SetChecked(1);
-			m_pxChooseHQ^.SetChecked(1);
-			m_pxDisableWarpgate^.SetDisabled(false);
-			m_pxLockDiplomacy^.SetDisabled(true);
-			m_pxChooseHQ^.SetDisabled(true);
+		if(CClientWrap.GetUserProfileValueI("Multiplayer/GameType",iGameType)==iGameType && m_bInit)then
+			//KLog.LogSpam("Kr1s1m", "OnChangeGameType: CClientWrap.GetUserProfileValueI(Multiplayer/GameType,iGameType)==iGameType && m_bInit => nothing was updated");
+			return false;
 		endif;
-		CClientWrap.SetUserProfileValue("Multiplayer/GameType",iGameType);
-		CClientWrap.SetUserProfileValue("Multiplayer/DisableWarpgate",m_pxDisableWarpgate^.GetChecked());
-		CClientWrap.SetUserProfileValue("Multiplayer/LockDiplomacy",m_pxLockDiplomacy^.GetChecked());
-		CClientWrap.SetUserProfileValue("Multiplayer/ChooseHQ",m_pxChooseHQ^.GetChecked());
-		CClientWrap.SetUserProfileValue("Multiplayer/ChooseColor",m_pxChooseColor^.GetChecked());
-		m_pxDefenderTimer^.SetDisabled(iGameType!=2);
+		var string sLevelName=GetSelectedLevelName(GetSelectedLevelCheckSumme());
+		var string sPrevLevelName=GetSelectedLevelName(CClientWrap.GetUserProfileValue("Multiplayer/LastSelectedMap",""));
+		//KLog.LogSpam("Kr1s1m", "OnChangeGameType(): UpdateCustomCheckboxes called.");
+		UpdateCustomCheckboxes(sLevelName, sPrevLevelName); //Kr1s1m: Handle checkboxes in relation to GameType and sLevelName
+		CClientWrap.SetUserProfileValue("Multiplayer/GameType",iGameType); //Kr1s1m: Update GameType with selected in dropdown
+		m_pxDefenderTimer^.SetDisabled(iGameType!=2); //Kr1s1m: Disable defender timer if GameType is not Defender
 		m_pxDefenderTimerStat^.SetDisabled(iGameType!=2);
-		var CConfig xConf;
-		xConf.SetB("Server/GameplayOptions/DiploLocked",m_pxLockDiplomacy^.GetCheckMark());
 		ReloadHostMapList();
 		OnSelectMap();
 		return true;
@@ -528,18 +479,22 @@ class CLevelSettingsPage inherit CWindow
 	endproc;
 	
 	export proc bool OnSelectMap()
-		var string sLevelCheckSumme;
 		if(m_pxHostMapList!=null)then
-			sLevelCheckSumme=GetSelectedLevelCheckSumme();
-			var string sLevelName = GetLevelNameAt(m_pxHostMapList^.GetSelectedItem());
-			if(sLevelName!="?" && m_bInit)then
-				UpdateCustomCheckboxes(sLevelName);
+			var string sLevelCheckSumme=GetSelectedLevelCheckSumme();
+			var string sTmp=CClientWrap.GetUserProfileValue("Multiplayer/LastSelectedMap","");
+			if(sLevelCheckSumme!=sTmp)then
+				CClientWrap.SetUserProfileValue("Multiplayer/LastSelectedMap",sLevelCheckSumme); 
+				m_pxOwner^.UpdateGameInfoWindow();
+				var string sLevelName=GetSelectedLevelName(sLevelCheckSumme);
+				var string sPrevLevelName=GetSelectedLevelName(sTmp);
+				if(sLevelName!="?" && m_bInit)then
+					//KLog.LogSpam("Kr1s1m", "OnSelectMap(): UpdateCustomCheckboxes called.");
+					UpdateCustomCheckboxes(sLevelName, sPrevLevelName);
+				endif;
+				return true;
 			endif;
 		endif;
-		CClientWrap.SetUserProfileValue("Multiplayer/LastSelectedMap",sLevelCheckSumme);
-		var string sTmp=CClientWrap.GetUserProfileValue("Multiplayer/LastSelectedMap","");
-		m_pxOwner^.UpdateGameInfoWindow();
-		return(true);
+		return false;
 	endproc;
 	
 	export proc string GetSelectedLevelCheckSumme()
@@ -553,38 +508,86 @@ class CLevelSettingsPage inherit CWindow
 		return "";
 	endproc;
 	
-	proc void UpdateCustomCheckboxes(string p_sLevelName)
+	
+	proc bool CheckCustomMap(string p_sLevelName)
+		return (p_sLevelName=="Single 01"||
+				p_sLevelName=="Single 02"||p_sLevelName=="Single 03"||p_sLevelName=="Single 04"||
+				p_sLevelName=="Single 05"||p_sLevelName=="Single 06"||p_sLevelName=="Single 07"||
+				p_sLevelName=="Single 08"||p_sLevelName=="Single 09"||p_sLevelName=="Single 10"||
+				p_sLevelName=="Single 11"||p_sLevelName=="Single 12"||p_sLevelName=="Single 13"||
+				p_sLevelName=="Single 14"||p_sLevelName=="Single 15"||p_sLevelName=="Single 16"||
+				p_sLevelName=="Single B41"||p_sLevelName=="Single B42"||p_sLevelName=="Single B43");
+	endproc;
+	
+	proc void UpdateCustomCheckboxes(string p_sLevelName, string p_sPrevLevelName)
+		var bool bCustom = CheckCustomMap(p_sLevelName);
+		var bool bPrevCustom = CheckCustomMap(p_sPrevLevelName);
 		var int iGameType=m_pxGameType^.GetSelectedItem();
-		if(iGameType==0 && (p_sLevelName=="Single 01"||p_sLevelName=="Single 02"||
-		p_sLevelName=="Single 03"||p_sLevelName=="Single 04"||p_sLevelName=="Single 05"||
-		p_sLevelName=="Single 06"||p_sLevelName=="Single 07"||p_sLevelName=="Single 08"||
-		p_sLevelName=="Single 09"||p_sLevelName=="Single 10"||p_sLevelName=="Single 11"||
-		p_sLevelName=="Single 12"||p_sLevelName=="Single 13"||p_sLevelName=="Single 14"||
-		p_sLevelName=="Single 15"||p_sLevelName=="Single 16"||p_sLevelName=="Single B41"||
-		p_sLevelName=="Single B42"||p_sLevelName=="Single B43"))then	//"Game mode" == CUSTOM
-			m_pxDisableWarpgate^.SetChecked(1);
-			m_pxDisableFOW^.SetChecked(0);
-			m_pxLockDiplomacy^.SetChecked(0);
-			m_pxAllowHandicap^.SetChecked(0);
-			m_pxChooseHQ^.SetChecked(1);
-			m_pxChooseColor^.SetChecked(0);
-			//KLog.LogSpam("Kr1s1m", "map: "+p_sLevelName+" ===> 100010 - set");
-			m_pxDisableWarpgate^.SetDisabled(true);
-			m_pxDisableFOW^.SetDisabled(true);
-			m_pxLockDiplomacy^.SetDisabled(true);
-			m_pxAllowHandicap^.SetDisabled(true);
-			m_pxChooseHQ^.SetDisabled(true);
-			m_pxChooseColor^.SetDisabled(true);
-			//KLog.LogSpam("Kr1s1m", "map: "+p_sLevelName+" ===> 100010 - locked");
-		else
-			m_pxDisableWarpgate^.SetDisabled(false);
-			m_pxDisableFOW^.SetDisabled(false);
-			m_pxLockDiplomacy^.SetDisabled(false);
-			m_pxAllowHandicap^.SetDisabled(false);
-			m_pxChooseHQ^.SetDisabled(false);
-			m_pxChooseColor^.SetDisabled(false);
-			//KLog.LogSpam("Kr1s1m", "map: "+p_sLevelName+" ===> free");
+		var bool bChangedType = CClientWrap.GetUserProfileValueI("Multiplayer/GameType",iGameType)!=iGameType;
+		if(bCustom==bPrevCustom && !bChangedType && m_bInit)then
+			//KLog.LogSpam("Kr1s1m", "UpdateCustomCheckboxes: (bCustom==bPrevCustom && !bChangedType && m_bInit) => nothing was updated");
+			return;//Kr1s1m: Skip updating checkboxes after Init if custom status and game type are the same
 		endif;
+		//Kr1s1m: Used switch statement to optimise check performance
+		switch(iGameType)
+			case(0)do //Kr1s1m: iGameType 0 ===> Deathmatch ============================================
+				if(bCustom)then
+					m_pxDisableWarpgate^.SetChecked(1);
+					m_pxDisableFOW^.SetChecked(0);
+					m_pxLockDiplomacy^.SetChecked(0);
+					m_pxAllowHandicap^.SetChecked(0);
+					m_pxChooseHQ^.SetChecked(1);
+					m_pxChooseColor^.SetChecked(0);
+					//KLog.LogSpam("Kr1s1m", "map: "+p_sLevelName+" ===> 100010 - set");
+				endif;
+				
+				m_pxDisableWarpgate^.SetDisabled(bCustom);
+				m_pxDisableFOW^.SetDisabled(bCustom);
+				m_pxLockDiplomacy^.SetDisabled(bCustom);
+				m_pxAllowHandicap^.SetDisabled(bCustom);
+				m_pxChooseHQ^.SetDisabled(bCustom);
+				m_pxChooseColor^.SetDisabled(bCustom);
+				
+				//if(bCustom)then
+					//KLog.LogSpam("Kr1s1m", "map: "+p_sLevelName+" ===> 100010 - locked");
+				//else
+					//KLog.LogSpam("Kr1s1m", "map: "+p_sLevelName+" ===> free");
+				//endif;
+			endcase;
+			case(1)do //Kr1s1m: iGameType 1 ===> Domination ============================================
+				if(bChangedType)then m_pxDisableWarpgate^.SetChecked(1); endif;
+				m_pxLockDiplomacy^.SetChecked(1);
+				if(bChangedType)then m_pxChooseHQ^.SetChecked(0); endif;
+				
+				m_pxDisableWarpgate^.SetDisabled(false);
+				m_pxDisableFOW^.SetDisabled(false);
+				m_pxLockDiplomacy^.SetDisabled(true);
+				m_pxAllowHandicap^.SetDisabled(false);
+				m_pxChooseHQ^.SetDisabled(false);
+				m_pxChooseColor^.SetDisabled(false);
+				//KLog.LogSpam("Kr1s1m", "map: "+p_sLevelName+" ===> (1)?1?(0)?, where: (1)/(0) - set/unset & free, 1/0 - set/unset & locked, ? - unchanged free");
+			endcase;
+			case(2)do //Kr1s1m: iGameType 2 ===> Defender ==============================================
+				if(bChangedType)then m_pxDisableWarpgate^.SetChecked(1); endif;
+				m_pxLockDiplomacy^.SetChecked(1);
+				m_pxChooseHQ^.SetChecked(1);
+				
+				m_pxDisableWarpgate^.SetDisabled(false);
+				m_pxDisableFOW^.SetDisabled(false);
+				m_pxLockDiplomacy^.SetDisabled(true);
+				m_pxAllowHandicap^.SetDisabled(false);
+				m_pxChooseHQ^.SetDisabled(true);
+				m_pxChooseColor^.SetDisabled(false);
+				//KLog.LogSpam("Kr1s1m", "map: "+p_sLevelName+" ===> (1)?1?1?, where: (1)/(0) - set/unset & free, 1/0 - set/unset & locked, ? - unchanged free);
+			endcase;
+			case default do
+				//KLog.LogSpam("Kr1s1m", "iGameType did not match any valid case - nothing was updated");
+				return;//Kr1s1m: Skip updating checkboxes if no valid game type was matched
+			endcase;
+		endswitch;
+		//Kr1s1m: Update server cfg and user profile settings:
+		var CConfig xConf;
+		xConf.SetB("Server/GameplayOptions/DiploLocked",m_pxLockDiplomacy^.GetCheckMark());
 		CClientWrap.SetUserProfileValue("Multiplayer/DisableWarpgate",m_pxDisableWarpgate^.GetChecked());
 		CClientWrap.SetUserProfileValue("Multiplayer/DisableFOW",m_pxDisableFOW^.GetChecked());
 		CClientWrap.SetUserProfileValue("Multiplayer/LockDiplomacy",m_pxLockDiplomacy^.GetChecked());
@@ -593,20 +596,17 @@ class CLevelSettingsPage inherit CWindow
 		CClientWrap.SetUserProfileValue("Multiplayer/ChooseColor",m_pxChooseColor^.GetChecked());
 	endproc;
 	
-	proc string GetLevelNameAt(int p_iIndex)
-        var string sLevelName = "?";
-        var ^CItemDataString pxItemData=cast<CItemDataString>(m_pxHostMapList^.GetItemData(p_iIndex));
-        if(pxItemData!=null)then
-                var string sLevelCheckSumme=pxItemData^.m_sData;
-                var ^CMapInfoList.CMapInfo pxMapInfo=m_xMapInfoList.GetMapInfo_CheckSumme(sLevelCheckSumme);
-                if(pxMapInfo!=null)then
-                    //KLog.LogSpam("Kr1s1m", "pxMapInfo != null");
-                    sLevelName = pxMapInfo^.GetMapName();
-                else
-                    //KLog.LogSpam("Kr1s1m", "pxMapInfo == null");
-                endif;
+	proc string GetSelectedLevelName(string p_sLevelCheckSumme)
+        var string sLevelName;
+        var ^CMapInfoList.CMapInfo pxMapInfo=m_xMapInfoList.GetMapInfo_CheckSumme(p_sLevelCheckSumme);
+        if(pxMapInfo!=null)then
+            //KLog.LogSpam("Kr1s1m", "pxMapInfo != null");
+            sLevelName = pxMapInfo^.GetMapName();
+        else
+            //KLog.LogSpam("Kr1s1m", "pxMapInfo == null");
+			sLevelName = "?";
         endif;
-        //KLog.LogSpam("Kr1s1m", "sLevelName at index "+p_iIndex.ToString() +" = "+sLevelName);
+        //KLog.LogSpam("Kr1s1m", "sLevelName: "+sLevelName);
         return sLevelName;
     endproc;
 	
