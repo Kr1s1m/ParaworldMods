@@ -393,36 +393,6 @@ class CMirageServer inherit CWindow
 		return(true);
 	endproc;
 	
-	export proc bool OnEnableAlienCommandsEx()
-		var string sName="AlienCommands";
-		var CConfig xConf;
-		var ^CGame pxGame = ^(CGameWrap.GetGame());
-		var bool bOn=pxGame^.GetAttribInt(sName)==1;
-		var bool bAllow = pxGame^.GetDiplomacyLocked();
-		if(!bOn)then
-			return true;
-		elseif(!bAllow)then
-			xConf.SetB("Server/AllowAlienCommands", false);
-			pxGame^.SetAttrib(sName,false);
-		endif;
-		return(true);
-	endproc;
-	
-	export proc bool OnEnableAllyBuildupEx()
-		var string sName="AllyBuildup";
-		var CConfig xConf;
-		var ^CGame pxGame = ^(CGameWrap.GetGame());
-		var bool bOn=pxGame^.GetAttribInt(sName)==1;
-		var bool bAllow = pxGame^.GetDiplomacyLocked();
-		if(!bOn)then
-			return true;
-		elseif(!bAllow)then
-			xConf.SetB("Server/GameplayOptions/"+sName, false);
-			pxGame^.SetAttrib(sName,false);
-		endif;
-		return(true);
-	endproc;
-	
 	export proc bool OnEnableAnimalsVisInFOWEx()
 		var string sName="AnimalsVisInFOW";
 		var CConfig xConf;
@@ -444,21 +414,6 @@ class CMirageServer inherit CWindow
 		var ^CGame pxGame = ^(CGameWrap.GetGame());
 		var bool bOn=pxGame^.GetAttribInt(sName)==1;
 		var bool bAllow = pxGame^.GetFOWEnabled();
-		if(!bOn)then
-			return true;
-		elseif(!bAllow)then
-			xConf.SetB("Server/GameplayOptions/"+sName, false);
-			pxGame^.SetAttrib(sName,false);
-		endif;
-		return(true);
-	endproc;
-	
-	export proc bool OnEnableAuraSharingEx()
-		var string sName="AuraSharing";
-		var CConfig xConf;
-		var ^CGame pxGame = ^(CGameWrap.GetGame());
-		var bool bOn=pxGame^.GetAttribInt(sName)==1;
-		var bool bAllow = pxGame^.GetDiplomacyLocked();
 		if(!bOn)then
 			return true;
 		elseif(!bAllow)then
@@ -837,17 +792,10 @@ class CMirageServer inherit CWindow
 			sName="AllyBuildup";
 			pxCheckBox=cast<CCheckBox>(GetControl(sName));
 			bEnabled=xConf.GetSetB("Server/GameplayOptions/"+sName,true);
-			bAllow = pxGame^.GetDiplomacyLocked();
-			if(!bAllow)then
-				pxCheckBox^.SetChecked(0);
-				pxCheckBox^.SetDisabled(true);
+			if(bEnabled)then
+				pxCheckBox^.SetChecked(1);
 			else
-				if(bEnabled)then
-					pxCheckBox^.SetChecked(1);
-				else
-					pxCheckBox^.SetChecked(0);
-				endif;
-				pxCheckBox^.SetDisabled(false);
+				pxCheckBox^.SetChecked(0);
 			endif;
 			pxCheckBox^.m_xOnStateChange=OnEnableAllyBuildup;
 			pxGame^.SetAttrib(sName,bEnabled);
@@ -914,16 +862,8 @@ class CMirageServer inherit CWindow
 			var string sName="AllyBuildup";
 			var ^CCheckBox pxTmp=cast<CCheckBox>(GetControl(sName));
 			var CConfig xConf;
-			var ^CGame pxGame = ^(CGameWrap.GetGame());
-			var bool bAllow = pxGame^.GetDisableWarpgate();
-			if(!bAllow)then
-				pxTmp^.SetChecked(0);
-				pxTmp^.SetDisabled(true);
-			else
-				pxTmp^.SetDisabled(false);
-			endif;
 			xConf.SetB("Server/GameplayOptions/"+sName,pxTmp^.GetCheckMark());
-			pxGame^.SetAttrib(sName,pxTmp^.GetCheckMark());
+			CGameWrap.GetGame().SetAttrib(sName,pxTmp^.GetCheckMark());
 			return(true);
 		endproc;
 		
@@ -1472,17 +1412,10 @@ class CMirageServer inherit CWindow
 			sName="AuraSharing";
 			pxCheckBox=cast<CCheckBox>(GetControl(sName));
 			bEnabled=xConf.GetSetB("Server/GameplayOptions/"+sName,true);
-			bAllow = pxGame^.GetDiplomacyLocked();
-			if(!bAllow)then
-				pxCheckBox^.SetChecked(0);
-				pxCheckBox^.SetDisabled(true);
+			if(bEnabled)then
+				pxCheckBox^.SetChecked(1);
 			else
-				if(bEnabled)then
-					pxCheckBox^.SetChecked(1);
-				else
-					pxCheckBox^.SetChecked(0);
-				endif;
-				pxCheckBox^.SetDisabled(false);
+				pxCheckBox^.SetChecked(0);
 			endif;
 			pxCheckBox^.m_xOnStateChange=OnEnableAuraSharing;
 			pxGame^.SetAttrib(sName,bEnabled);
@@ -1548,17 +1481,10 @@ class CMirageServer inherit CWindow
 			sName="AlienCommands";
 			pxCheckBox=cast<CCheckBox>(GetControl(sName));
 			bEnabled=xConf.GetSetB("Server/AllowAlienCommands",false);
-			bAllow = pxGame^.GetDiplomacyLocked();
-			if(!bAllow)then
-				pxCheckBox^.SetChecked(0);
-				pxCheckBox^.SetDisabled(true);
+			if(bEnabled)then
+				pxCheckBox^.SetChecked(1);
 			else
-				if(bEnabled)then
-					pxCheckBox^.SetChecked(1);
-				else
-					pxCheckBox^.SetChecked(0);
-				endif;
-				pxCheckBox^.SetDisabled(false);
+				pxCheckBox^.SetChecked(0);
 			endif;
 			pxCheckBox^.m_xOnStateChange=OnEnableAlienCommands;
 			pxGame^.SetAttrib(sName,bEnabled);
@@ -1688,16 +1614,8 @@ class CMirageServer inherit CWindow
 			var string sName="AuraSharing";
 			var ^CCheckBox pxTmp=cast<CCheckBox>(GetControl(sName));
 			var CConfig xConf;
-			var ^CGame pxGame = ^(CGameWrap.GetGame());
-			var bool bAllow = pxGame^.GetDiplomacyLocked();
-			if(!bAllow)then
-				pxTmp^.SetChecked(0);
-				pxTmp^.SetDisabled(true);
-			else
-				pxTmp^.SetDisabled(false);
-			endif;
 			xConf.SetB("Server/GameplayOptions/"+sName,pxTmp^.GetCheckMark());
-			pxGame^.SetAttrib(sName,pxTmp^.GetCheckMark());
+			CGameWrap.GetGame().SetAttrib(sName,pxTmp^.GetCheckMark());
 			return(true);
 		endproc;
 		
@@ -1751,16 +1669,8 @@ class CMirageServer inherit CWindow
 			var string sName="AlienCommands";
 			var ^CCheckBox pxTmp=cast<CCheckBox>(GetControl(sName));
 			var CConfig xConf;
-			var ^CGame pxGame = ^(CGameWrap.GetGame());
-			var bool bAllow = pxGame^.GetDiplomacyLocked();
-			if(!bAllow)then
-				pxTmp^.SetChecked(0);
-				pxTmp^.SetDisabled(true);
-			else
-				pxTmp^.SetDisabled(false);
-			endif;
 			xConf.SetB("Server/AllowAlienCommands",pxTmp^.GetCheckMark());
-			pxGame^.SetAttrib(sName,pxTmp^.GetCheckMark());
+			CGameWrap.GetGame().SetAttrib(sName,pxTmp^.GetCheckMark());
 			return(true);
 		endproc;
 		
