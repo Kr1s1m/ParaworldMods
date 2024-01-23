@@ -136,9 +136,6 @@ class CMultiPlayerClientMgr
 			endif;
 			var ^CMirageServer pxMirageServer = m_pxPlayerListWindow^.GetMirageSettings();
 			if(pxMirageServer!=null)then
-				pxMirageServer^.OnEnableAlienCommandsEx();
-				pxMirageServer^.OnEnableAllyBuildupEx();
-				pxMirageServer^.OnEnableAuraSharingEx();
 				pxMirageServer^.OnEnableAnimalsVisInFOWEx();
 				pxMirageServer^.OnEnableAttackInFOWEx();
 				pxMirageServer^.OnEnableShowResourcesInFOWEx();
