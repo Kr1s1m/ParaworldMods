@@ -430,7 +430,10 @@ class CLevelSettingsPage inherit CWindow
 		var int iTeams=m_pxTeams^.GetSelectedItemAsString().ToInt();
 		CClientWrap.SetUserProfileValue("Multiplayer/NumTeams",iTeams);		
 		ReloadHostMapList();
-		m_pxLockDiplomacy^.SetDisabled(iTeams==1);
+		//Kr1s1m: Disabled and unchecked diplomacy if teams dropdown is currently set to 1
+		//Kr1s1m: Don't enable the diplomacy checkbox if map is switched to multicampaign
+		var string sLevelName = GetSelectedLevelName(GetSelectedLevelCheckSumme());
+		m_pxLockDiplomacy^.SetDisabled(iTeams==1 || CheckCustomMap(sLevelName));
 		return true;
 	endproc;
 	
@@ -452,6 +455,10 @@ class CLevelSettingsPage inherit CWindow
 		CClientWrap.SetUserProfileValue("Multiplayer/NumPlayers",iPlayers);
 		ReloadHostMapList();
 		CheckNumTeams(iPlayers);
+		var int iTeams=m_pxTeams^.GetSelectedItemAsString().ToInt();
+		if(iTeams==1)then //Kr1s1m: TODO: Add Custom map check if needed in the future. Nothing special needed for multicampaign.
+			m_pxLockDiplomacy^.SetDisabled(true);
+		endif;
 		return true;
 	endproc;
 	
@@ -522,6 +529,7 @@ class CLevelSettingsPage inherit CWindow
 	proc void UpdateCustomCheckboxes(string p_sLevelName, string p_sPrevLevelName)
 		var bool bCustom = CheckCustomMap(p_sLevelName);
 		var bool bPrevCustom = CheckCustomMap(p_sPrevLevelName);
+		var int iTeams=m_pxTeams^.GetSelectedItemAsString().ToInt();
 		var int iGameType=m_pxGameType^.GetSelectedItem();
 		var bool bChangedType = CClientWrap.GetUserProfileValueI("Multiplayer/GameType",iGameType)!=iGameType;
 		if(bCustom==bPrevCustom && !bChangedType && m_bInit)then
@@ -543,7 +551,7 @@ class CLevelSettingsPage inherit CWindow
 				
 				m_pxDisableWarpgate^.SetDisabled(bCustom);
 				m_pxDisableFOW^.SetDisabled(bCustom);
-				m_pxLockDiplomacy^.SetDisabled(bCustom);
+				m_pxLockDiplomacy^.SetDisabled(bCustom || iTeams==1); //Kr1s1m: Keep diplo checkbox disabled if iTeams==1
 				m_pxAllowHandicap^.SetDisabled(bCustom);
 				m_pxChooseHQ^.SetDisabled(bCustom);
 				m_pxChooseColor^.SetDisabled(bCustom);
