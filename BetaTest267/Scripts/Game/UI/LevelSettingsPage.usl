@@ -551,7 +551,7 @@ class CLevelSettingsPage inherit CWindow
 				
 				m_pxDisableWarpgate^.SetDisabled(bCustom);
 				m_pxDisableFOW^.SetDisabled(bCustom);
-				m_pxLockDiplomacy^.SetDisabled(bCustom || iTeams==1); //Kr1s1m: Keep diplo checkbox disabled if iTeams==1
+				m_pxLockDiplomacy^.SetDisabled(bCustom || iTeams==1); //Kr1s1m: Keep diplomacy checkbox disabled if iTeams==1
 				m_pxAllowHandicap^.SetDisabled(bCustom);
 				m_pxChooseHQ^.SetDisabled(bCustom);
 				m_pxChooseColor^.SetDisabled(bCustom);
