@@ -806,6 +806,7 @@ class CFight inherit CTask
 		if(!p_xFighter.IsValid()||p_xFighter.GetObj()==null)then return false; endif;
 		var ^CFightingObj pxFighter=cast<CFightingObj>(p_xFighter.GetObj());
 		if(pxFighter==null)then return false; endif;
+		pxFighter^.FreeHunt(true);
 		var real fRadius=100.0f;
 		var CObjQuery xHuntSearch;
 		var vec3 vPos=pxFighter^.GetPos();
@@ -842,11 +843,14 @@ class CFight inherit CTask
 				UpdateEnemy(xPrey[0], pxCandidat^.GetPos());
 				pxFighter^.SetCurEnemy(xPrey[0]);
 				pxFighter^.UpdateAggressionPos(pxCandidat^.GetPos());
+				pxFighter^.ReactToGamePlayCommand("Action",pxCandidat,pxCandidat^.GetPos(),"/Attack",false,false,false);
 				return true;
 			endwhile;
 		else
+			pxFighter^.FreeHunt(false);
 			return false;
 		endif;
+		pxFighter^.FreeHunt(false);
 		return false;
 	endproc;
 	
