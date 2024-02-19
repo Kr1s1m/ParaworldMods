@@ -5,6 +5,8 @@ Root {
 				CheckBox {
 					FruitsRemovement = '1'
 					NestRespawn = '1'
+					ShowResourcesInFOW = '1'
+					AnimalsVisInFOW = '1'
 				}
 			}
 			Unit {
@@ -23,6 +25,8 @@ Root {
 				CheckBox {
 					FruitsRemovement = '0'
 					NestRespawn = '0'
+					ShowResourcesInFOW = '0'
+					AnimalsVisInFOW = '0'
 				}
 			}
 			Unit {

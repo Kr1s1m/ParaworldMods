@@ -702,7 +702,12 @@ class CLevelSettingsPageHost inherit CLevelSettingsPage
 					sPath.Replace("/MIRAGE/","/Base/");
 					CEvt_LoadLevelPreview.Send(sPath);
 					CUIStateMgr.Get().SetSelectedMapFile(sPath);
-					UpdateCustomMapAttribs(sLevelName);
+					//UpdateCustomMapAttribs(sLevelName);
+					if(sLevelName=="Single 01" || sLevelName=="Single 02")then
+						CGameWrap.GetGame().SetAttrib("ShowResourcesInFOW", 0);
+						CGameWrap.GetGame().SetAttrib("AnimalsVisInFOW", false);
+						KLog.LogSpam("Kr1s1m", "World FOW attribs disabled");
+					endif;
 				endif;
 			endif;
 		else

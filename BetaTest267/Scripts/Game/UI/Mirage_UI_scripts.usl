@@ -668,9 +668,9 @@ class CMirageServer inherit CWindow
 			pxCheckBox^.m_xOnStateChange=OnEnableCorpseDamage;
 			pxGame^.SetAttrib(sName,bEnabled);
 			
-			if(super.Init("World"))then
-				super.UpdateCustomMapMirageSettings();
-			endif;
+			//if(super.Init("World"))then
+				//super.UpdateCustomMapMirageSettings();
+			//endif;
 			
 			pxButton = cast<CButton>(GetControl("OkButton"));
 			pxButton^.m_xOnClick=OnOk;
@@ -828,9 +828,9 @@ class CMirageServer inherit CWindow
 			pxCheckBox^.m_xOnStateChange=OnEnableAllyBuildup;
 			pxGame^.SetAttrib(sName,bEnabled);
 			
-			if(super.Init("Building"))then
-				super.UpdateCustomMapMirageSettings();
-			endif;
+			//if(super.Init("Building"))then
+				//super.UpdateCustomMapMirageSettings();
+			//endif;
 			
 			pxButton = cast<CButton>(GetControl("OkButton"));
 			pxButton^.m_xOnClick=OnOk;
@@ -1102,9 +1102,9 @@ class CMirageServer inherit CWindow
 			pxSpinCtrl^.m_xOnChange=OnChangeTransportHealing;
 			pxGame^.SetAttrib(sName,iSetting);
 			
-			if(super.Init("Unit"))then
-				super.UpdateCustomMapMirageSettings();
-			endif;
+			//if(super.Init("Unit"))then
+				//super.UpdateCustomMapMirageSettings();
+			//endif;
 			
 			pxButton = cast<CButton>(GetControl("OkButton"));
 			pxButton^.m_xOnClick=OnOk;
@@ -1519,9 +1519,9 @@ class CMirageServer inherit CWindow
 			pxGame^.SetAttrib(sName,bEnabled);
 			
 			
-			if(super.Init("GameMechanic"))then
-				super.UpdateCustomMapMirageSettings();
-			endif;
+			//if(super.Init("GameMechanic"))then
+				//super.UpdateCustomMapMirageSettings();
+			//endif;
 			
 			pxButton = cast<CButton>(GetControl("OkButton"));
 			pxButton^.m_xOnClick=OnOk;
@@ -1868,9 +1868,9 @@ class CMirageServer inherit CWindow
 			pxSpinCtrl^.m_xOnChange=OnChangeSandGlass;
 			pxGame^.SetAttrib(sName,iSetting);
 			
-			if(super.Init("Timer"))then
-				super.UpdateCustomMapMirageSettings();
-			endif;
+			//if(super.Init("Timer"))then
+				//super.UpdateCustomMapMirageSettings();
+			//endif;
 			
 			pxButton = cast<CButton>(GetControl("OkButton"));
 			pxButton^.m_xOnClick=OnOk;
@@ -2193,9 +2193,9 @@ class CMirageServer inherit CWindow
 			pxGame^.SetAttrib(sName,pxCheckBox^.GetChecked());
 			m_apxBoxes.AddEntry(pxCheckBox);
 			
-			if(super.Init("PhantomMode"))then
-				super.UpdateCustomMapMirageSettings();
-			endif;
+			//if(super.Init("PhantomMode"))then
+				//super.UpdateCustomMapMirageSettings();
+			//endif;
 			
 			pxButton = cast<CButton>(GetControl("OkButton"));
 			pxButton^.m_xOnClick=OnOk;
