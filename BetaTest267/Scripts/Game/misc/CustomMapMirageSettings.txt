@@ -1,0 +1,40 @@
+Root {
+	Levels {
+		Single_01 {
+			World {
+				CheckBox {
+					FruitsRemovement = '1'
+					NestRespawn = '1'
+				}
+			}
+			Unit {
+				SpinCtrlNumber {
+					TransportHealing = '10'
+				}
+			}
+			GameMechanic {
+				DropList {
+					DwnLvlSwitch = '2'
+				}
+			}
+		}
+		Single_02 {
+			World {
+				CheckBox {
+					FruitsRemovement = '0'
+					NestRespawn = '0'
+				}
+			}
+			Unit {
+				SpinCtrlNumber {
+					TransportHealing = '50'
+				}
+			}
+			GameMechanic {
+				DropList {
+					DwnLvlSwitch = '1'
+				}
+			}
+		}
+	}
+}

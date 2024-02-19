@@ -647,6 +647,44 @@ class CLevelSettingsPageHost inherit CLevelSettingsPage
 		CMultiPlayerClientMgr.Get().SetNumPlayers(iNumPlayers);
 	endconstructor;
 	
+	proc void UpdateCustomMapAttribs(string p_sLevelName)
+		KLog.LogSpam("Kr1s1m", "CMirageServer::UpdateCustomMapAttribs("+p_sLevelName+") begin");
+		var CPropDB xCustomMapMirageSettingsDB;
+		xCustomMapMirageSettingsDB.Load(CClientWrap.GetUrsRelPath()+"/data/base/scripts/game/misc/CustomMapMirageSettings.txt");
+		var ^CPropDB.CNode pxLevelsNode = xCustomMapMirageSettingsDB.GetRoot().Get("Levels");
+		if(pxLevelsNode!=null)then
+			var string sLevelName = p_sLevelName;
+			sLevelName.Replace(" ", "_");
+			var ^CPropDB.CNode pxLevelNameNode = pxLevelsNode^.Get(sLevelName);
+			if(pxLevelNameNode!=null)then
+				KLog.LogSpam("Kr1s1m", pxLevelNameNode^.Name()+" custom map level matched");
+				var bool bLock = true;
+				var int k, kC=pxLevelNameNode^.NumSubs();
+				for(k=0)cond(k<kC)iter(k++)do//Kr1s1m: Iterate the adjust categories inside the level name node
+					var ^CPropDB.CNode pxAdjustCategoryNode = ^(pxLevelNameNode^.Get(k));
+					KLog.LogSpam("Kr1s1m", "adjusting "+pxAdjustCategoryNode^.Name()+" mirage settings");
+					var int i, iC=pxAdjustCategoryNode^.NumSubs();
+					for(i=0)cond(i<iC)iter(i++)do//Kr1s1m: Iterate the setting types inside a given adjust category node
+						var ^CPropDB.CNode pxSettingTypeNode = ^(pxAdjustCategoryNode^.Get(i));
+						var string sSettingType = pxSettingTypeNode^.Name();
+						var int j, jC=pxSettingTypeNode^.NumSubs();
+						for(j=0)cond(j<jC)iter(j++)do//Kr1s1m: Iterate the setting nodes inside a given setting type node
+							var ^CPropDB.CNode pxSettingNode = ^(pxSettingTypeNode^.Get(j));
+							var string sSettingName = pxSettingNode^.Name();
+							var string sValue = pxSettingNode^.Value();
+							CGameWrap.GetGame().SetAttrib(sSettingName, sValue.ToInt());
+							KLog.LogSpam("Kr1s1m", "CGameWrap.GetGame().SetAttrib("+sSettingName+", "+sValue+")");
+						endfor;
+					endfor;
+				endfor;
+			else
+				KLog.LogSpam("Kr1s1m", p_sLevelName+" is not a custom map. Nothing has been updated.");
+			endif;
+		endif;
+		KLog.LogSpam("Kr1s1m", "CMirageServer::UpdateCustomMapAttribs("+p_sLevelName+") end");
+	endproc;
+	
+	
 	proc bool OnSelectMap()
 		super.OnSelectMap();
 		var int iIndex=m_pxHostMapList^.GetSelectedItem();
@@ -657,12 +695,14 @@ class CLevelSettingsPageHost inherit CLevelSettingsPage
 				var ^CMapInfoList.CMapInfo pxMapInfo=m_xMapInfoList.GetMapInfo_CheckSumme(sLevelCheckSumme);
 				if(pxMapInfo!=null)then
 					//var string sPath=CClientWrap.GetUrsRelPath()+"/Data/Base/Maps/Multiplayer/"+pxMapInfo^.GetFile();
-					CUIStateMgr.Get().SetLoadScreenInfo(CUIStateMgr.CLoadScreenInfo.LOADSCR_MULTIPLAYER,pxMapInfo^.GetMapName(),pxMapInfo^.GetLevelInfo().GetLevelCheckSumme());
+					var string sLevelName=pxMapInfo^.GetMapName();
+					CUIStateMgr.Get().SetLoadScreenInfo(CUIStateMgr.CLoadScreenInfo.LOADSCR_MULTIPLAYER,sLevelName,pxMapInfo^.GetLevelInfo().GetLevelCheckSumme());
 					var string sPath=pxMapInfo^.GetFile();
 					sPath.Replace("/BoosterPack1/","/Base/"); // Henry: on dedicated server the maps from Boosterpack and Mirage were unusable without this
 					sPath.Replace("/MIRAGE/","/Base/");
 					CEvt_LoadLevelPreview.Send(sPath);
 					CUIStateMgr.Get().SetSelectedMapFile(sPath);
+					UpdateCustomMapAttribs(sLevelName);
 				endif;
 			endif;
 		else
