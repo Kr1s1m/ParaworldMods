@@ -342,6 +342,8 @@ class CLevelSettingsPage inherit CWindow
 		endif;
 		var string sLevelName=GetSelectedLevelName(GetSelectedLevelCheckSumme());
 		var string sPrevLevelName=GetSelectedLevelName(CClientWrap.GetUserProfileValue("Multiplayer/LastSelectedMap",""));
+		//KLog.LogSpam("Kr1s1m", "OnChangeGameType(): UpdateCustomDroplists called.");
+		UpdateCustomDroplists(sLevelName, sPrevLevelName);
 		//KLog.LogSpam("Kr1s1m", "OnChangeGameType(): UpdateCustomCheckboxes called.");
 		UpdateCustomCheckboxes(sLevelName, sPrevLevelName); //Kr1s1m: Handle checkboxes in relation to GameType and sLevelName
 		CClientWrap.SetUserProfileValue("Multiplayer/GameType",iGameType); //Kr1s1m: Update GameType with selected in dropdown
@@ -463,6 +465,9 @@ class CLevelSettingsPage inherit CWindow
 	endproc;
 	
 	proc void CheckNumTeams(int p_iMaxTeams)
+		var string sLevelName = GetSelectedLevelName(GetSelectedLevelCheckSumme());
+		//Kr1s1m: If the map is custom skip this procedure to enforce a particular custom entry inside dropdown menu
+		if(CheckCustomMap(sLevelName))then return; endif;
 		var int iNumItems=m_pxTeams^.NumItems();
 		//if(iNumItems!=p_iMaxTeams)then
 			var int iNumTeams=CClientWrap.GetUserProfileValueI("Multiplayer/NumTeams",2);
@@ -495,6 +500,8 @@ class CLevelSettingsPage inherit CWindow
 				var string sLevelName=GetSelectedLevelName(sLevelCheckSumme);
 				var string sPrevLevelName=GetSelectedLevelName(sTmp);
 				if(sLevelName!="?" && m_bInit)then
+					//KLog.LogSpam("Kr1s1m", "OnSelectMap(): UpdateCustomDroplists called.");
+					UpdateCustomDroplists(sLevelName, sPrevLevelName);
 					//KLog.LogSpam("Kr1s1m", "OnSelectMap(): UpdateCustomCheckboxes called.");
 					UpdateCustomCheckboxes(sLevelName, sPrevLevelName);
 				endif;
@@ -603,6 +610,29 @@ class CLevelSettingsPage inherit CWindow
 		CClientWrap.SetUserProfileValue("Multiplayer/ChooseHQ",m_pxChooseHQ^.GetChecked());
 		CClientWrap.SetUserProfileValue("Multiplayer/ChooseColor",m_pxChooseColor^.GetChecked());
 	endproc;
+	
+	proc void UpdateCustomDroplists(string p_sLevelName, string p_sPrevLevelName)
+		var bool bCustom = CheckCustomMap(p_sLevelName);
+		var bool bPrevCustom = CheckCustomMap(p_sPrevLevelName);
+		var int iTeams=m_pxTeams^.GetSelectedItemAsString().ToInt();
+		if(bCustom==bPrevCustom && m_bInit)then
+			//KLog.LogSpam("Kr1s1m", "UpdateCustomDroplists: (bCustom==bPrevCustom && m_bInit) => nothing was updated");
+			return;//Kr1s1m: Skip updating droplists after Init if custom status is the same
+		endif;
+		if(bCustom)then
+			iTeams = 8;
+			m_pxTeams^.Clear();
+			m_pxTeams^.AddItem(iTeams.ToString());
+			m_pxTeams^.Select(iTeams);
+			OnChangeTeams(); //Kr1s1m: Update server cfg and user profile settings
+			//KLog.LogSpam("Kr1s1m", "custom teams set to "+m_pxTeams^.GetSelectedItemAsString());
+		elseif(bPrevCustom)then //Kr1s1m: If the last map was custom but the current is not...
+			//Kr1s1m: ...fix the selected teams by performing the on change players actions
+			OnChangePlayers();
+			//KLog.LogSpam("Kr1s1m", "non-custom map detected - teams restored.");
+		endif;
+		m_pxTeams^.SetDisabled(bCustom);
+    endproc;
 	
 	proc string GetSelectedLevelName(string p_sLevelCheckSumme)
         var string sLevelName;
