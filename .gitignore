@@ -1,12 +1,14 @@
 Base/
 BoosterPack1/
 BoosterPack3/
+ChangesTest/
 Paragames/
 UIfor2K/
 UIfor4K/
 Info/BaseLocale.info
 Info/BoosterPack1.info
 Info/BoosterPack3.info
+Info/ChangesTest.info
 Info/LevelEd.info
 Info/Locale_UK.info
 Info/Locale_DE.info
