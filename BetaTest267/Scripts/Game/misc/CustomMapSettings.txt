@@ -1,0 +1,585 @@
+Root {
+	Levels {
+		Single_01 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '3'
+					Credits = '201'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_02 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '3'
+					Credits = '202'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_03 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '3'
+					Credits = '203'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_04 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '4'
+					Credits = '204'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_05 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '4'
+					Credits = '205'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_06 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '2'
+					Credits = '206'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_07 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '5'
+					Credits = '207'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_08 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '4'
+					Credits = '208'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_09 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '3'
+					Credits = '209'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_10 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '3'
+					Credits = '210'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_11 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '2'
+					Credits = '211'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_12 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '5'
+					Credits = '212'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_13 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '3'
+					Credits = '213'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_14 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '3'
+				}
+				DropList {
+					NumTeams = '8'
+					Credits = '214'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_15 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '2'
+					Credits = '215'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_16 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '3'
+					Credits = '216'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_B41 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '3'
+					Credits = '241'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_B42 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '4'
+					Credits = '242'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		Single_B43 {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '0'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+					ChooseColor = '0'
+				}
+				DropList {
+					NumTeams = '4'
+					Credits = '243'
+				}
+			}
+			CustomPreviewImage = '1'
+			CustomLoadScreen = '1'
+			CustomDiplomacy = '1'
+			CustomPointBuy = '1'
+			CustomGameType = '1'
+			CustomPlayerName = '1'
+			CustomPlayerPreset = '1'
+			CustomPlayerTeam = '1'
+			CustomPlayerColor = '1'
+			CustomStatisticScreen = '1'
+		}
+		_CU_MP_3_MULTI_PRISONERS {
+			
+		}
+		_CU_MP_4_ASS_CREED {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+				}
+				DropList {
+					NumTeams = '4'
+					Credits = '-1'
+				}
+			}
+		}
+		_CU_MP_6_BFPW_HIGHLAND {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '1'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+				}
+				DropList {
+					NumTeams = '2'
+					Credits = '-1'
+				}
+			}
+			CustomPlayerTeam = '1'
+		}
+		_CU_MP_6_CRASH_RPG {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					DisableFOW = '0'
+					LockDiplomacy = '1'
+					AllowHandicap = '0'
+					ChooseHQ = '1'
+				}
+				DropList {
+					NumTeams = '2'
+					Credits = '-1'
+				}
+			}
+			CustomPlayerTeam = '1'
+		}
+		_MN_MP_4_AIRBATTLE {
+			
+		}
+		Living_ruins_[CUSTOM] {
+			
+		}
+		BfPW_-_Holy_City_[CUSTOM] {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+				}
+				DropList {
+					Credits = '-1'
+				}
+			}
+		}
+		Defender-Domination_[CUSTOM] {
+			LevelSettings {
+				DropList {
+					NumTeams = '3'
+				}
+			}
+			CustomPlayerTeam = '1'
+		}
+		Divided_World_[CUSTOM] {
+			LevelSettings {
+				CheckBox {
+					DisableWarpgate = '1'
+					LockDiplomacy = '1'
+				}
+				DropList {
+					NumTeams = '2'
+					Credits = '-1'
+				}
+			}
+			CustomPlayerTeam = '1'
+		}
+		The_New_World_Order {
+			
+		}
+	}
+}
