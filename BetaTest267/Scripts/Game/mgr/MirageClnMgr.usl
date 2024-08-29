@@ -177,7 +177,7 @@ class CMirageClnMgr
 		
 		//Kr1s1m: Mirage settings backup DB init
 		m_pxMirageSettingsBackupDB = new CPropDB();
-		if(m_pxMirageSettingsBackupDB^.Load(CClientWrap.GetUrsRelPath()+"/Data/ChangesTest/Scripts/Game/misc/MirageSettingsBackup.txt"))then
+		if(m_pxMirageSettingsBackupDB^.Load(CClientWrap.GetUrsRelPath()+"/Data/BetaTest267/Scripts/Game/misc/MirageSettingsBackup.txt"))then
 			//KLog.LogSpam("Kr1s1m",  "-------------> mirage settings backup db ready <--------------");
 		else
 			m_pxMirageSettingsBackupDB = null;
@@ -185,7 +185,7 @@ class CMirageClnMgr
 		
 		//Kr1s1m: Level settings backup DB init
 		m_pxLevelSettingsBackupDB = new CPropDB();
-		if(m_pxLevelSettingsBackupDB^.Load(CClientWrap.GetUrsRelPath()+"/Data/ChangesTest/Scripts/Game/misc/LevelSettingsBackup.txt"))then
+		if(m_pxLevelSettingsBackupDB^.Load(CClientWrap.GetUrsRelPath()+"/Data/BetaTest267/Scripts/Game/misc/LevelSettingsBackup.txt"))then
 			//KLog.LogSpam("Kr1s1m",  "-------------> level settings backup db ready <--------------");
 		else
 			m_pxLevelSettingsBackupDB = null;
