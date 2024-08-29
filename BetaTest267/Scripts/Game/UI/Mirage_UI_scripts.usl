@@ -507,6 +507,7 @@ class CMirageServer inherit CWindow
 			m_sAdjustCategory = p_sAdjustCategory;
 			var ^CPropDB pxGenericData=^(CGameWrap.GetClient().GetLevelInfo().GetGenericData());
 			m_sLevelName=(pxGenericData^)["Base/LevelName"].Value();
+			//if(m_sLevelName=="")then m_sLevelName=CUIStateMgr.Get().GetLoadScreenInfo().m_sLevelName; endif;
 			//KLog.LogSpam("Kr1s1m","Mirage_UI_scripts::CAdjust"+m_sAdjustCategory+" m_sLevelName="+m_sLevelName);
 			m_bInit = m_sAdjustCategory!="" && m_sAdjustCategory!="?" && m_sLevelName!="" && m_sLevelName!="?";
 			return m_bInit;
@@ -515,7 +516,10 @@ class CMirageServer inherit CWindow
 		export proc void UpdateCustomMapMirageSettings()
 			//KLog.LogSpam("Kr1s1m", "CMirageServer::UpdateCustomMapMirageSettings begin");
 			var CPropDB xCustomMapMirageSettingsDB;
-			xCustomMapMirageSettingsDB.Load(CClientWrap.GetUrsRelPath()+"/data/base/scripts/game/misc/CustomMapMirageSettings.txt");
+			if(!xCustomMapMirageSettingsDB.Load(CClientWrap.GetUrsRelPath()+"/data/base/scripts/game/misc/CustomMapMirageSettings.txt"))then
+				//KLog.LogSpam("Kr1s1m", "Custom map Mirage Settings DB failed to load");
+				return;
+			endif;
 			var ^CPropDB.CNode pxLevelsNode = xCustomMapMirageSettingsDB.GetRoot().Get("Levels");
 			if(pxLevelsNode!=null)then
 				var string sLevelName = m_sLevelName;
@@ -523,10 +527,12 @@ class CMirageServer inherit CWindow
 				var ^CPropDB.CNode pxLevelNameNode = pxLevelsNode^.Get(sLevelName);
 				if(pxLevelNameNode!=null)then
 					//KLog.LogSpam("Kr1s1m", pxLevelNameNode^.Name()+" custom map level matched");
-					var int k, kC=pxLevelNameNode^.NumSubs();
+					var ^CPropDB.CNode pxMirageSettingsNode = pxLevelNameNode^.Get("MirageSettings");
+					if(pxMirageSettingsNode==null)then /*KLog.LogSpam("Kr1s1m", "Mirage settings not found");*/ return; endif;
+					var int k, kC=pxMirageSettingsNode^.NumSubs();
 					//Kr1s1m: TODO: replace for loop with .Get(m_sAdjustCategory)
 					for(k=0)cond(k<kC)iter(k++)do//Kr1s1m: Iterate the adjust categories inside the level name node
-						var ^CPropDB.CNode pxAdjustCategoryNode = ^(pxLevelNameNode^.Get(k));
+						var ^CPropDB.CNode pxAdjustCategoryNode = ^(pxMirageSettingsNode^.Get(k));
 						if(pxAdjustCategoryNode^.Name()!=m_sAdjustCategory)then
 							continue; //Kr1s1m: skip the categories which don't match the adjust category field
 						else

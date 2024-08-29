@@ -1,0 +1,22 @@
+Root {
+	LevelSettingsBackup {
+		Multiplayer {
+			DefenderTimer = '45'
+			Password = ''
+			Port = '1905'
+			ChooseHQ = '1'
+			ChooseColor = '1'
+			NumTeams = '2'
+			LockDiplomacy = '1'
+			Credits = '3000'
+			DisableWarpgate = '1'
+			DisableFOW = '1'
+			AllowHandicap = '1'
+		}
+		Server {
+			GameplayOptions {
+				DiploLocked = '1'
+			}
+		}
+	}
+}
